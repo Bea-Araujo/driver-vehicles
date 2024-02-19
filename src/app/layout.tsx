@@ -20,12 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AppRouterCacheProvider>
-        <StrictMode>
         <body className={inter.className}>
           <Header />
           {children}
         </body>
-        </StrictMode>
       </AppRouterCacheProvider>
     </html>
   );

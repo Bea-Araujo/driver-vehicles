@@ -3,25 +3,25 @@
         {
            "id": 0,
            "name": "Filomena",
-            "docuemnt": "99999999999",
+            "document": "99999999999",
             "hasVehicle": false
         },
         {
             "id": 1,
             "name": "Filomeno",
-             "docuemnt": "99999999999",
+             "document": "99999999999",
              "hasVehicle": false
          },
          {
             "id": 2,
             "name": "Godofreda",
-             "docuemnt": "99999999999",
+             "document": "99999999999",
              "hasVehicle": true
          },
          {
             "id": 3,
             "name": "Godofredo",
-             "docuemnt": "99999999999",
+             "document": "99999999999",
              "hasVehicle": true
          }
     ]
