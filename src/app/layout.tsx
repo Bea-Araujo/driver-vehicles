@@ -2,6 +2,8 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { StrictMode } from 'react';
+import Header from '../../components/header';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +20,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AppRouterCacheProvider>
-        <body className={inter.className}>{children}</body>
+        <StrictMode>
+        <body className={inter.className}>
+          <Header />
+          {children}
+        </body>
+        </StrictMode>
       </AppRouterCacheProvider>
     </html>
   );

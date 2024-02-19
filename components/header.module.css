@@ -1,0 +1,11 @@
+.headerContainer{
+    display: flex;
+    justify-content: space-between;
+
+    font-size: 1.6rem;
+    padding: .5rem;
+}
+
+.navigationContainer button{
+    margin-right: .5rem
+}

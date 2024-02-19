@@ -7,6 +7,10 @@
   min-height: 100vh;
 }
 
+.main p {
+  font-size: 5rem !important;
+}
+
 .description {
   display: inherit;
   justify-content: inherit;
