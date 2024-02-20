@@ -18,15 +18,17 @@ export const fetchDrivers = async() => {
 }
 
 export const fetchVehicles = async() => {
+    // TODO: refactor this method using vercel db
     try {
-        const response = await fetch('http://localhost:3000/api/vehicles', {
+        const response = await fetch('http://localhost:8000/vehicles', {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
             }
         })
-        const {drivers} = await response.json()
-        return drivers
+        const data = await response.json()
+        
+        return data
     } catch (error) {
         console.log(error)
         throw new Error("Failed to GET vehicles")

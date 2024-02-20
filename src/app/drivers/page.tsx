@@ -7,7 +7,7 @@ import { fetchDrivers } from "../../../lib/data";
 import { createDriver, deleteDriver, updateDriver } from "../../../lib/actions";
 import { MinimumTableProps } from "../../../components/enhancedTable";
 
-export class Rows extends MinimumTableProps{
+export class DriverTableRow extends MinimumTableProps{
     id: string
     name: string
     document: string
@@ -23,16 +23,15 @@ export class Rows extends MinimumTableProps{
 }
 
 export default function Page() {
-    const tableRef = useRef(null)
     const [selectedId, setSelectedId] = useState<string>()
 
     const areButtonsActive = useMemo(() => {
         return !!selectedId
     }, [selectedId])
 
-    const [rows, setRows] = useState<Rows[]>([])
+    const [rows, setRows] = useState<DriverTableRow[]>([])
 
-    const headCellsDto: {id: keyof Rows, label: string}[] = [
+    const headCellsDto: {id: keyof DriverTableRow, label: string}[] = [
         {
             id: 'id',
             label: 'ID',
@@ -51,7 +50,7 @@ export default function Page() {
         }
     ];
 
-    const [editFormValues, setEditFormValues] = useState<Rows>({
+    const [editFormValues, setEditFormValues] = useState<DriverTableRow>({
         id: "",
         name: "",
         document: "",
@@ -60,7 +59,7 @@ export default function Page() {
 
     const updateSelectedDriverValues = useCallback(() => {
         if (rows.length === 0) return
-        setEditFormValues(rows.find(row => row.id === selectedId) || new Rows())
+        setEditFormValues(rows.find(row => row.id === selectedId) || new DriverTableRow())
     }, [selectedId, rows])
 
     const selectedDriverDisplayData = useMemo(() => {
@@ -84,20 +83,6 @@ export default function Page() {
     useEffect(() => {
         updateSelectedDriverValues()
     }, [selectedId, updateSelectedDriverValues])
-
-    const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 150 },
-        { field: 'name', headerName: 'Nome', width: 150 },
-        { field: 'document', headerName: 'Documento', width: 150 },
-        {
-            field: 'hasVehicle',
-            headerName: 'Vínculo',
-            description: 'Motorista tem vínculo com um veículo',
-            valueGetter: (params: GridValueGetterParams) => params.value ? "Sim" : "Não",
-            width: 150
-        },
-    ];
-
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
@@ -126,7 +111,7 @@ export default function Page() {
     return (
         <main>
 
-            <EnhancedTable
+            <EnhancedTable<DriverTableRow>
                 rows={rows}
                 selected={selectedId}
                 setSelected={setSelectedId}

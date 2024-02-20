@@ -1,18 +1,19 @@
 'use client'
 import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import EnhancedTable, { Rows } from "../../../components/enhancedTable";
 import { Box, Button, Modal, TextField } from "@mui/material";
-import { fetchDrivers, fetchVehicles } from "../../../lib/data";
+import { fetchVehicles } from "../../../lib/data";
 import { createDriver, deleteDriver, updateDriver } from "../../../lib/actions";
+import EnhancedTable, { MinimumTableProps } from "../../../components/enhancedTable";
 
 
-export class VehicleTableRows{
+export class VehicleTableRow extends MinimumTableProps{
     id: string;
     carPlate: string;
     brand: string;
 
     constructor(input?: { id: string, carPlate: string, brand: string}){
+        super(input?.id || "")
         this.id = input?.id || ""
         this.carPlate = input?.carPlate || ""
         this.brand = input?.brand || ""
@@ -25,9 +26,25 @@ export default function Page() {
         return !!selectedId
     }, [selectedId])
 
-    const [rows, setRows] = useState<VehicleTableRows[]>([])
+    const [rows, setRows] = useState<VehicleTableRow[]>([])
+    console.log(rows)
+    
+    const headCellsDto: {id: keyof VehicleTableRow, label: string}[] = [
+        {
+            id: 'id',
+            label: 'ID',
+        },
+        {
+            id: 'carPlate',
+            label: 'Placa',
+        },
+        {
+            id: 'brand',
+            label: 'Marca',
+        }
+    ];
 
-    const [editFormValues, setEditFormValues] = useState<VehicleTableRows>({
+    const [editFormValues, setEditFormValues] = useState<VehicleTableRow>({
         id: "",
         carPlate: "",
         brand: ""
@@ -36,11 +53,12 @@ export default function Page() {
     const updateSelectedVehicleValues = useCallback(() => {
         if (!rows) return
         if (rows.length === 0) return
-        setEditFormValues(rows.find(row => row.id === selectedId) || new VehicleTableRows())
+        setEditFormValues(rows.find(row => row.id === selectedId) || new VehicleTableRow())
     }, [selectedId, rows])
 
     async function fetchData() {
         const response = await fetchVehicles()
+        console.log(response)
         setRows(response)
     }
 
@@ -51,20 +69,6 @@ export default function Page() {
     useEffect(() => {
         updateSelectedVehicleValues()
     }, [selectedId, updateSelectedVehicleValues])
-
-    const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 150 },
-        { field: 'name', headerName: 'Nome', width: 150 },
-        { field: 'document', headerName: 'Documento', width: 150 },
-        {
-            field: 'hasVehicle',
-            headerName: 'Vínculo',
-            description: 'Motorista tem vínculo com um veículo',
-            valueGetter: (params: GridValueGetterParams) => params.value ? "Sim" : "Não",
-            width: 150
-        },
-    ];
-
 
     const [isOpen, setIsOpen] = useState(false)
     function toggleModal() {
@@ -87,11 +91,12 @@ export default function Page() {
     return (
         <main>
 
-            {/* <EnhancedTable
+            <EnhancedTable<VehicleTableRow>
                 rows={rows}
                 selected={selectedId}
                 setSelected={setSelectedId}
-            /> */}
+                headCellsDto={headCellsDto}
+            />
             <Button onClick={toggleModal}>Criar</Button>
             <Button disabled={!areButtonsActive}>Editar</Button>
             <Button disabled={!areButtonsActive} onClick={handleDriverDeletion}>Deletar</Button>
