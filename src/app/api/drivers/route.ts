@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 
-export async function GET(request: Request, context: Response) {
+export async function GET() {
     console.log("GET REQUEST")
     try {
         const response = await fetch('http://localhost:8000/drivers')
@@ -16,7 +16,7 @@ export async function GET(request: Request, context: Response) {
     }
 }
 
-export async function POST(request: Request, context: Response) {
+export async function POST(request: Request) {
     try {
         const {name, document, hasVehicle} = await request.json()
         
