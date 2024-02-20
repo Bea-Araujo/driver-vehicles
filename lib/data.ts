@@ -1,6 +1,7 @@
 import { GET } from "@/app/api/drivers/route"
 
 export const fetchDrivers = async() => {
+    //TODO: substituir por chamada ao banco de dados do vercel
     try {
         const response = await fetch('http://localhost:3000/api/drivers', {
             method: "GET",

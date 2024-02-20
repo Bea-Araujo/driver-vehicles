@@ -16,11 +16,11 @@ export async function PUT(request: Request, context: {params: {id: string}}) {
     console.log("PUT REQUEST")
     const driverId = context.params.id
     try {
-        const {name, document, hasVehicle} = await request.json()
+        const {name, document, vehicleId} = await request.json()
         const updatedUser = {
             name, 
             document, 
-            hasVehicle
+            vehicleId
         }
         const res = await fetch(`http://localhost:8000/drivers/${driverId}`, {
             method: "PUT",
