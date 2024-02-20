@@ -1,16 +1,6 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import { visuallyHidden } from '@mui/utils';
+import { useMemo, useState } from 'react';
+import { EnhancedTableHead } from './enhancedTableHead';
+import { Box, Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow } from '@mui/material';
 
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -23,10 +13,10 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     return 0;
 }
 
-type Order = 'asc' | 'desc';
+export type TableSortOrder = 'asc' | 'desc';
 
 function getComparator<Key extends keyof any>(
-    order: Order,
+    order: TableSortOrder,
     orderBy: Key,
 ): (
     a: { [key in Key]: number | string; },
@@ -37,7 +27,7 @@ function getComparator<Key extends keyof any>(
         : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
+function stableSort<T extends Record<string, string | number>>(array: readonly T[], comparator: (a: T, b: T) => number) {
     const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
     stabilizedThis.sort((a, b) => {
       const order = comparator(a[0], b[0]);
@@ -49,119 +39,27 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
     return stabilizedThis.map((el) => el[0]);
   }
 
-export class Rows{
-    id: string
-    name: string
-    document: string
-    vehicleId: string
-
-    constructor(input?: {id: string, name: string, document: string, vehicleId?: string}){
-        this.id = input?.id || ''
-        this.name = input?.name || ''
-        this.document = input?.document || ''
-        this.vehicleId = input?.vehicleId || ''
-    }
-}
-
-interface EnhancedTableHeaderProps<T> {
-    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof T) => void;
-    order: Order;
-    orderBy: string;
-    rowCount: number;
-}
-export function EnhancedTableHead(props: EnhancedTableHeaderProps<Rows>) {
-
-    interface HeadCell<T> {
-        disablePadding: boolean;
-        id: keyof T;
-        label: string;
-        numeric: boolean;
-    }
-
-    const headCells: readonly HeadCell<Rows>[] = [
-        {
-            id: 'id',
-            numeric: true,
-            disablePadding: true,
-            label: 'ID',
-        },
-        {
-            id: 'name',
-            numeric: false,
-            disablePadding: false,
-            label: 'Nome',
-        },
-        {
-            id: 'document',
-            numeric: false,
-            disablePadding: false,
-            label: 'Documento',
-        },
-        {
-            id: 'vehicleId',
-            numeric: false,
-            disablePadding: false,
-            label: 'Vínculo',
-        }
-    ];
-
-    const { order, orderBy, onRequestSort } =
-        props;
-    
-    const createSortHandler =
-        (property: keyof Rows) => (event: React.MouseEvent<unknown>) => {
-            onRequestSort(event, property);
-        };
-
-    return (
-        <TableHead>
-            <TableRow>
-                <TableCell padding="checkbox">
-                    
-                </TableCell>
-                {headCells.map((headCell) => (
-                    <TableCell
-                        key={headCell.id}
-                        align='right'
-                        padding='normal'
-                        sortDirection={orderBy === headCell.id ? order : false}
-                    >
-                        <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}
-                        >
-                            {headCell.label}
-                            {orderBy === headCell.id ? (
-                                <Box component="span" sx={visuallyHidden}>
-                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                </Box>
-                            ) : null}
-                        </TableSortLabel>
-                    </TableCell>
-                ))}
-            </TableRow>
-        </TableHead>
-    );
-}
-
-
-interface EnhancedTableProps{
-    rows: Rows[],
+interface EnhancedTableProps<T>{
+    rows: T[],
     selected?: string,
+    headCellsDto: {id: keyof T, label: string}[],
     setSelected:  React.Dispatch<React.SetStateAction<string | undefined>>
 }
 
-export default function EnhancedTable({rows, selected, setSelected}: EnhancedTableProps) {
-    const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<keyof Rows>('id');
-    // const [selected, setSelected] = React.useState<readonly number[]>([]);
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+interface MinimumPropsNeeded {
+    id: string,
+    [key: string]: string
+}
+
+export default function EnhancedTable<T extends MinimumPropsNeeded>({rows, headCellsDto, selected, setSelected}: EnhancedTableProps<T>) {
+    const [order, setOrder] = useState<TableSortOrder>('asc');
+    const [orderBy, setOrderBy] = useState<keyof T>('id');
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
-        property: keyof Rows,
+        property: keyof T,
     ) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
@@ -186,7 +84,7 @@ export default function EnhancedTable({rows, selected, setSelected}: EnhancedTab
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-    const visibleRows = React.useMemo(
+    const visibleRows = useMemo(
         () =>
             stableSort(rows, getComparator(order, orderBy)).slice(
                 page * rowsPerPage,
@@ -204,11 +102,12 @@ export default function EnhancedTable({rows, selected, setSelected}: EnhancedTab
                         aria-labelledby="tableTitle"
                         size='medium'
                     >
-                        <EnhancedTableHead
+                        <EnhancedTableHead<T>
                             order={order}
                             orderBy={orderBy}
                             onRequestSort={handleRequestSort}
                             rowCount={rows.length}
+                            headCellsDTO={headCellsDto}
                         />
                         <TableBody>
                             {visibleRows.map((row, index) => {
