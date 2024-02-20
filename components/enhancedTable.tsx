@@ -29,8 +29,8 @@ function getComparator<Key extends keyof any>(
     order: Order,
     orderBy: Key,
 ): (
-    a: { [key in Key]: number | string | boolean; },
-    b: { [key in Key]: number | string | boolean; },
+    a: { [key in Key]: number | string; },
+    b: { [key in Key]: number | string; },
 ) => number {
     return order === 'desc'
         ? (a, b) => descendingComparator(a, b, orderBy)
@@ -40,29 +40,36 @@ function getComparator<Key extends keyof any>(
 function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
     const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
     stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
-        if (order !== 0) {
-            return order;
-        }
-        return a[1] - b[1];
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) {
+        return order;
+      }
+      return a[1] - b[1];
     });
     return stabilizedThis.map((el) => el[0]);
-}
+  }
 
-interface Rows{
-    id: number
+export class Rows{
+    id: string
     name: string
     document: string
-    hasVehicle: boolean
+    vehicleId: string
+
+    constructor(input?: {id: string, name: string, document: string, vehicleId?: string}){
+        this.id = input?.id || ''
+        this.name = input?.name || ''
+        this.document = input?.document || ''
+        this.vehicleId = input?.vehicleId || ''
+    }
 }
 
-interface EnhancedTableProps<T> {
+interface EnhancedTableHeaderProps<T> {
     onRequestSort: (event: React.MouseEvent<unknown>, property: keyof T) => void;
     order: Order;
     orderBy: string;
     rowCount: number;
 }
-export function EnhancedTableHead(props: EnhancedTableProps<Rows>) {
+export function EnhancedTableHead(props: EnhancedTableHeaderProps<Rows>) {
 
     interface HeadCell<T> {
         disablePadding: boolean;
@@ -91,7 +98,7 @@ export function EnhancedTableHead(props: EnhancedTableProps<Rows>) {
             label: 'Documento',
         },
         {
-            id: 'hasVehicle',
+            id: 'vehicleId',
             numeric: false,
             disablePadding: false,
             label: 'Vínculo',
@@ -139,10 +146,16 @@ export function EnhancedTableHead(props: EnhancedTableProps<Rows>) {
 }
 
 
-export default function EnhancedTable({rows}: {rows: Rows[]}) {
+interface EnhancedTableProps{
+    rows: Rows[],
+    selected?: string,
+    setSelected:  React.Dispatch<React.SetStateAction<string | undefined>>
+}
+
+export default function EnhancedTable({rows, selected, setSelected}: EnhancedTableProps) {
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof Rows>('id');
-    const [selected, setSelected] = React.useState<readonly number[]>([]);
+    // const [selected, setSelected] = React.useState<readonly number[]>([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -155,11 +168,8 @@ export default function EnhancedTable({rows}: {rows: Rows[]}) {
         setOrderBy(property);
     };
 
-    const handleSelection = (id: number) => {
-        const selectedIndex = selected.indexOf(id);
-        let newSelected: number[] = [];
-        selectedIndex === -1 ? newSelected.push(id) : newSelected.unshift();
-        setSelected(newSelected);
+    const handleSelection = (id: string) => {
+        selected === id ? setSelected(''): setSelected(id);
     };
 
     const handleChangePage = (event: unknown, newPage: number) => {
@@ -171,7 +181,7 @@ export default function EnhancedTable({rows}: {rows: Rows[]}) {
         setPage(0);
     };
 
-    const isSelected = (id: number) => selected.indexOf(id) !== -1;
+    const isSelected = (id: string) => selected === id;
 
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -237,7 +247,9 @@ export default function EnhancedTable({rows}: {rows: Rows[]}) {
                                         
                                         <TableCell align="right">{row.name}</TableCell>
                                         <TableCell align="right">{row.document}</TableCell>
-                                        <TableCell align="right">{row.hasVehicle ? 'sim': 'não'}</TableCell>
+                                        <TableCell align="right">
+                                            {row.vehicleId ? 'sim': 'não'}
+                                        </TableCell>
                                     </TableRow>
                                 );
                             })}
