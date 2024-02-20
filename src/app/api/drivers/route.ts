@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server"
 
 export async function GET() {
-    console.log("GET REQUEST")
     try {
         const response = await fetch('http://localhost:8000/drivers')
         const drivers = await response.json()
