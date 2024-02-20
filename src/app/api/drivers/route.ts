@@ -3,11 +3,11 @@ import { NextResponse } from "next/server"
 export async function GET() {
     console.log("GET REQUEST")
     try {
-        const response = await fetch('http://localhost:8000/drivers')
-        const drivers = await response.json()
+        // const response = await fetch('http://localhost:8000/drivers')
+        // const drivers = await response.json()
         
         return NextResponse.json({
-            drivers: drivers
+            drivers: [{id: 0, name: 'test', vehicleId: 0}]
         }, {
             status: 200
         })
