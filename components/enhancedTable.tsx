@@ -46,12 +46,13 @@ interface EnhancedTableProps<T>{
     setSelected:  React.Dispatch<React.SetStateAction<string | undefined>>
 }
 
-interface MinimumPropsNeeded {
-    id: string,
+export class MinimumTableProps {
     [key: string]: string
+
+    constructor(public id: string){}
 }
 
-export default function EnhancedTable<T extends MinimumPropsNeeded>({rows, headCellsDto, selected, setSelected}: EnhancedTableProps<T>) {
+export default function EnhancedTable<T extends MinimumTableProps>({rows, headCellsDto, selected, setSelected}: EnhancedTableProps<T>) {
     const [order, setOrder] = useState<TableSortOrder>('asc');
     const [orderBy, setOrderBy] = useState<keyof T>('id');
     const [page, setPage] = useState(0);

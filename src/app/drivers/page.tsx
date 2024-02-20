@@ -1,10 +1,26 @@
 'use client'
 import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import EnhancedTable, { Rows } from "../../../components/enhancedTable";
+import EnhancedTable from "../../../components/enhancedTable";
 import { Box, Button, Modal, TextField } from "@mui/material";
 import { fetchDrivers } from "../../../lib/data";
 import { createDriver, deleteDriver, updateDriver } from "../../../lib/actions";
+import { MinimumTableProps } from "../../../components/enhancedTable";
+
+export class Rows extends MinimumTableProps{
+    id: string
+    name: string
+    document: string
+    vehicleId: string
+
+    constructor(input?: {id: string, name: string, document: string, vehicleId?: string}){
+        super(input?.id || '')
+        this.id = input?.id || ''
+        this.name = input?.name || ''
+        this.document = input?.document || ''
+        this.vehicleId = input?.vehicleId || ''
+    }
+}
 
 export default function Page() {
     const tableRef = useRef(null)
@@ -15,6 +31,25 @@ export default function Page() {
     }, [selectedId])
 
     const [rows, setRows] = useState<Rows[]>([])
+
+    const headCellsDto: {id: keyof Rows, label: string}[] = [
+        {
+            id: 'id',
+            label: 'ID',
+        },
+        {
+            id: 'name',
+            label: 'Nome',
+        },
+        {
+            id: 'document',
+            label: 'Documento',
+        },
+        {
+            id: 'vehicleId',
+            label: 'Vínculo',
+        }
+    ];
 
     const [editFormValues, setEditFormValues] = useState<Rows>({
         id: "",
@@ -95,6 +130,7 @@ export default function Page() {
                 rows={rows}
                 selected={selectedId}
                 setSelected={setSelectedId}
+                headCellsDto={headCellsDto}
             />
             <Button onClick={toggleCreateModal}>Criar</Button>
             <Button disabled={!areButtonsActive} onClick={toggleEditModal}>Editar</Button>
