@@ -23,6 +23,9 @@ export const vehiclesSlice = createSlice({
       .addCase(fetchVehiclesThunk.fulfilled, (state, action) => {
         state.status = "idle";
         vehiclesAdapter.upsertMany(state, action.payload);
+      })
+      .addCase(fetchVehiclesThunk.rejected, (state, action) => {
+        state.status = "failed";
       });
   },
 });
