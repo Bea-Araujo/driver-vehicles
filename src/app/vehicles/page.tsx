@@ -7,9 +7,9 @@ import EnhancedTable, { MinimumTableProps } from "../components/enhancedTable";
 import { useDispatch, useSelector } from "react-redux";
 import { selectVehicles, selectVehiclesById } from "../../../lib/redux/slices/vehiclesSlice/selectors";
 
-import { fetchVehiclesThunk } from "../../../lib/redux/slices/vehiclesSlice/thunks";
+import { deleteVehicleThunk, fetchVehiclesThunk, saveNewVehicleThunk, updateVehicleThunk } from "../../../lib/redux/slices/vehiclesSlice/thunks";
 import { ReduxDispatch, ReduxState } from "../../../lib/redux/store";
-import { Vehicle } from "../../../lib/redux/slices";
+import { Vehicle, vehicleAdded, vehicleDeleted } from "../../../lib/redux/slices";
 
 
 export class VehicleTableRow extends Vehicle {
@@ -27,13 +27,15 @@ export default function Page() {
         return !!selectedId
     }, [selectedId])
 
-    // const [rows, setRows] = useState<VehicleTableRow[]>([])
-
     const dispatch = useDispatch<ReduxDispatch>()
     const rows = useSelector(selectVehicles)
-    const test = useSelector((state: ReduxState) => selectVehiclesById(state, "2"))
-    console.log(rows)
-    console.log(test)
+
+    useEffect(() => {
+        console.log('rows changed')
+    }, [rows])
+
+    // const test = useSelector((state: ReduxState) => selectVehiclesById(state, "0"))
+    // console.log(test)
     
     const headCellsDto: {id: keyof VehicleTableRow, label: string}[] = [
         {
@@ -86,11 +88,32 @@ export default function Page() {
         }));
     };
 
-    const handleDriverDeletion = () => {
-        if (!selectedId) return
-        deleteDriver(selectedId)
+
+    function handleSubmitCreateForm(formData: FormData){
+        const payload = {
+            formData: formData,
+        }
+        dispatch(saveNewVehicleThunk(payload))
+        fetchData()
     }
 
+    function handleEditCreateForm(formData: FormData){
+        const payload = {
+            vehicleId: editFormValues.id, 
+            formData: formData,
+        }
+        dispatch(updateVehicleThunk(payload))
+        fetchData()
+    }
+
+    const handleDriverDeletion = () => {
+        const payload = {
+            vehicleId: editFormValues.id
+        }
+        dispatch(deleteVehicleThunk(payload))
+        dispatch(vehicleDeleted(editFormValues.id))
+        // fetchData()
+    }
 
     return (
         <main>
@@ -101,6 +124,7 @@ export default function Page() {
                 setSelected={setSelectedId}
                 headCellsDto={headCellsDto}
             />
+            {areButtonsActive}
             <Button onClick={toggleModal}>Criar</Button>
             <Button disabled={!areButtonsActive}>Editar</Button>
             <Button disabled={!areButtonsActive} onClick={handleDriverDeletion}>Deletar</Button>
@@ -117,7 +141,7 @@ export default function Page() {
             </Modal>
             <Box sx={{ width: 400 }}>
                 <h2 id="parent-modal-title">Criar um motorista</h2>
-                <form action={createVehicle}>
+                <form action={handleSubmitCreateForm}>
                     <TextField id="outlined-basic" label="Placa" variant="outlined" name="carPlate" />
                     <TextField id="outlined-basic" label="Marca" variant="outlined" name="brand" />
                     <Button type="submit">Send</Button>
@@ -127,7 +151,7 @@ export default function Page() {
 
             <Box sx={{ width: 400 }}>
                 <h2 id="parent-modal-title">Editar um motorista</h2>
-                <form action={(formData) => updateVehicle(formData, editFormValues.id)}>
+                <form action={handleEditCreateForm}>
                     <TextField
                         id="outlined-basic"
                         label="Placa"

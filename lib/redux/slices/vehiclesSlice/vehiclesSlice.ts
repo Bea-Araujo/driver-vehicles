@@ -27,6 +27,10 @@ export const vehiclesSlice = createSlice({
   },
 });
 
+export const { vehicleAdded, vehicleDeleted } = vehiclesSlice.actions
+
+export default vehiclesSlice.reducer
+
 export interface VehicleSliceState {
   vehicles: Vehicle[]
   status: "idle" | "loading" | "failed";

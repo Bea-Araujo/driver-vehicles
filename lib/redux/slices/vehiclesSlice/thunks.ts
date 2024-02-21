@@ -12,24 +12,24 @@ export const fetchVehiclesThunk = createAppAsyncThunk(
 
 export const saveNewVehicleThunk = createAppAsyncThunk(
     "vehicles/DB/saveNewVehicle",
-    async(formData: FormData) => {
-        const response = await createVehicle(formData)
+    async(payload: {formData: FormData}) => {
+        const response = await createVehicle(payload.formData)
         return response
     }
 )
 
 export const updateVehicleThunk = createAppAsyncThunk(
     "vehicles/DB/updateVehicle",
-    async(payload: {id: string, formData: FormData}) => {
-        const response = await updateVehicle(payload.formData, payload.id)
+    async(payload: {vehicleId: string, formData: FormData}) => {
+        const response = await updateVehicle(payload.formData, payload.vehicleId)
         return response
     }
 )
 
 export const deleteVehicleThunk = createAppAsyncThunk(
     "vehicles/DB/deleteVehicle",
-    async(payload: {id: string}) => {
-        const response = await deleteVehicle(payload.id)
+    async(payload: {vehicleId: string}) => {
+        const response = await deleteVehicle(payload.vehicleId)
         return response
     }
 )
