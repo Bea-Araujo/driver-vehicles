@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { StrictMode } from 'react';
 import Header from './components/header';
+import { ReduxProvider } from '../../lib/reduxProvider';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,13 +19,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <AppRouterCacheProvider>
-        <body className={inter.className}>
-          <Header />
-          {children}
-        </body>
-      </AppRouterCacheProvider>
-    </html>
+    <ReduxProvider>
+      <html lang="en">
+        <AppRouterCacheProvider>
+          <body className={inter.className}>
+            <Header />
+            {children}
+          </body>
+        </AppRouterCacheProvider>
+      </html>
+    </ReduxProvider>
   );
 }

@@ -4,20 +4,22 @@ import { Box, Button, Modal, TextField } from "@mui/material";
 import { fetchVehicles } from "../../../lib/data";
 import { createVehicle, deleteDriver, updateVehicle } from "../../../lib/actions";
 import EnhancedTable, { MinimumTableProps } from "../components/enhancedTable";
+import { useDispatch, useSelector } from "react-redux";
+import { selectVehicles, selectVehiclesById } from "../../../lib/redux/slices/vehiclesSlice/selectors";
+
+import { fetchVehiclesThunk } from "../../../lib/redux/slices/vehiclesSlice/thunks";
+import { ReduxDispatch, ReduxState } from "../../../lib/redux/store";
+import { Vehicle } from "../../../lib/redux/slices";
 
 
-export class VehicleTableRow extends MinimumTableProps{
-    id: string;
-    carPlate: string;
-    brand: string;
-
+export class VehicleTableRow extends Vehicle {
+    [key: string]: string
     constructor(input?: { id: string, carPlate: string, brand: string}){
-        super(input?.id || "")
-        this.id = input?.id || ""
-        this.carPlate = input?.carPlate || ""
-        this.brand = input?.brand || ""
+        super(input?.id || "", input?.carPlate || "", input?.brand || "")
     }
 }
+
+
 export default function Page() {
     const [selectedId, setSelectedId] = useState<string>()
 
@@ -25,7 +27,13 @@ export default function Page() {
         return !!selectedId
     }, [selectedId])
 
-    const [rows, setRows] = useState<VehicleTableRow[]>([])
+    // const [rows, setRows] = useState<VehicleTableRow[]>([])
+
+    const dispatch = useDispatch<ReduxDispatch>()
+    const rows = useSelector(selectVehicles)
+    const test = useSelector((state: ReduxState) => selectVehiclesById(state, "2"))
+    console.log(rows)
+    console.log(test)
     
     const headCellsDto: {id: keyof VehicleTableRow, label: string}[] = [
         {
@@ -55,8 +63,7 @@ export default function Page() {
     }, [selectedId, rows])
 
     async function fetchData() {
-        const response = await fetchVehicles()
-        setRows(response)
+        dispatch(fetchVehiclesThunk())
     }
 
     useEffect(() => {
