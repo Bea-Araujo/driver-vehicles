@@ -65,7 +65,7 @@ export const createVehicle = async (formData: FormData) => {
             brand,
         }
     
-        const response = await fetch('http://localhost:8000/vehicle', {
+        const response = await fetch('http://localhost:8000/vehicles', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -85,7 +85,7 @@ export const updateVehicle = async (formData: FormData, vehicleId: string) => {
             brand,
         }
 
-        const response = await fetch(`http://localhost:8000/vehicle/${vehicleId}`, {
+        const response = await fetch(`http://localhost:8000/vehicles/${vehicleId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -99,7 +99,7 @@ export const updateVehicle = async (formData: FormData, vehicleId: string) => {
 
 export const deleteVehicle = async (vehicleId: string) => {
     try {
-        const response = await fetch(`http://localhost:8000/vehicle/${vehicleId}`, {
+        const response = await fetch(`http://localhost:8000/vehicles/${vehicleId}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"

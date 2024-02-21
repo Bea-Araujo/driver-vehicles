@@ -3,7 +3,7 @@ import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Box, Button, Modal, TextField } from "@mui/material";
 import { fetchVehicles } from "../../../lib/data";
-import { createDriver, deleteDriver, updateDriver } from "../../../lib/actions";
+import { createDriver, createVehicle, deleteDriver, updateDriver, updateVehicle } from "../../../lib/actions";
 import EnhancedTable, { MinimumTableProps } from "../components/enhancedTable";
 
 
@@ -113,7 +113,7 @@ export default function Page() {
             </Modal>
             <Box sx={{ width: 400 }}>
                 <h2 id="parent-modal-title">Criar um motorista</h2>
-                <form action={createDriver}>
+                <form action={createVehicle}>
                     <TextField id="outlined-basic" label="Placa" variant="outlined" name="carPlate" />
                     <TextField id="outlined-basic" label="Marca" variant="outlined" name="brand" />
                     <Button type="submit">Send</Button>
@@ -123,7 +123,7 @@ export default function Page() {
 
             <Box sx={{ width: 400 }}>
                 <h2 id="parent-modal-title">Editar um motorista</h2>
-                <form action={(formData) => updateDriver(formData, editFormValues.id)}>
+                <form action={(formData) => updateVehicle(formData, editFormValues.id)}>
                     <TextField
                         id="outlined-basic"
                         label="Placa"
@@ -140,6 +140,7 @@ export default function Page() {
                         value={editFormValues?.brand} 
                         onChange={handleEditFormChange}
                         />
+                    <Button type="submit">Send</Button>
                 </form>
 
             </Box>
