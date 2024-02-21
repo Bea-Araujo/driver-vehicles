@@ -1,6 +1,6 @@
 import { EntityState, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
 
-import { fetchVehiclesThunk } from "./thunks";
+import { deleteVehicleThunk, fetchVehiclesThunk } from "./thunks";
 export const vehiclesAdapter = createEntityAdapter<Vehicle>();
 
 const initialState = vehiclesAdapter.getInitialState({
@@ -26,7 +26,17 @@ export const vehiclesSlice = createSlice({
       })
       .addCase(fetchVehiclesThunk.rejected, (state, action) => {
         state.status = "failed";
-      });
+      })
+      .addCase(deleteVehicleThunk.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(deleteVehicleThunk.fulfilled, (state, action) => {
+        state.status = "idle";
+        vehiclesAdapter.removeOne(state, action.payload);
+      })
+      .addCase(deleteVehicleThunk.rejected, (state, action) => {
+        state.status = "failed";
+      })
   },
 });
 

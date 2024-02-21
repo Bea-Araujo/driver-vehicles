@@ -30,6 +30,6 @@ export const deleteVehicleThunk = createAppAsyncThunk(
     "vehicles/DB/deleteVehicle",
     async(payload: {vehicleId: string}) => {
         const response = await deleteVehicle(payload.vehicleId)
-        return response
+        return payload.vehicleId
     }
 )

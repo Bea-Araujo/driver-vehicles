@@ -30,7 +30,6 @@ export default function Page() {
 
     const rows = useSelector(selectVehicles)
     const status = useSelector(selectVehicleStatus)
-    console.log(status)
     
     const [selectedId, setSelectedId] = useState<string>()
     
@@ -110,10 +109,11 @@ export default function Page() {
         }
         try {
             dispatch(deleteVehicleThunk(payload))
-            dispatch(vehicleDeleted(editFormValues.id))
-            //TODO: show success alert or success snackbar
-        } catch (error) {
-            //TODO: show error alert or error snackbar
+            if (status === 'failed') throw new Error("Falha ao deletar veículo")
+            enqueueSnackbar("Veículo deletado com sucesso!", { variant: "success" })
+        } catch (e) {
+            const error: Error = e as Error
+            enqueueSnackbar(error.message, { variant: "error" })
         }
     }
 
