@@ -10,6 +10,7 @@ import { selectVehicles, selectVehiclesById } from "../../../lib/redux/slices/ve
 import { deleteVehicleThunk, fetchVehiclesThunk, saveNewVehicleThunk, updateVehicleThunk } from "../../../lib/redux/slices/vehiclesSlice/thunks";
 import { ReduxDispatch, ReduxState } from "../../../lib/redux/store";
 import { Vehicle, vehicleAdded, vehicleDeleted } from "../../../lib/redux/slices";
+import VehiclesTable from "../components/Tables/vehiclesTable";
 
 
 export class VehicleTableRow extends Vehicle {
@@ -36,21 +37,6 @@ export default function Page() {
 
     // const test = useSelector((state: ReduxState) => selectVehiclesById(state, "0"))
     // console.log(test)
-    
-    const headCellsDto: {id: keyof VehicleTableRow, label: string}[] = [
-        {
-            id: 'id',
-            label: 'ID',
-        },
-        {
-            id: 'carPlate',
-            label: 'Placa',
-        },
-        {
-            id: 'brand',
-            label: 'Marca',
-        }
-    ];
 
     const [editFormValues, setEditFormValues] = useState<VehicleTableRow>({
         id: "",
@@ -118,11 +104,16 @@ export default function Page() {
     return (
         <main>
 
-            <EnhancedTable<VehicleTableRow>
+            {/* <EnhancedTable<VehicleTableRow>
                 rows={rows}
                 selected={selectedId}
                 setSelected={setSelectedId}
                 headCellsDto={headCellsDto}
+            /> */}
+            <VehiclesTable 
+                rows={rows}
+                selectedId={selectedId}
+                setSelectedId={setSelectedId}
             />
             {areButtonsActive}
             <Button onClick={toggleModal}>Criar</Button>

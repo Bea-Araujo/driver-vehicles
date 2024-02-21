@@ -1,14 +1,14 @@
 'use client'
-import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+
+import { createDriver, deleteDriver, updateDriver } from "../../../lib/actions";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import EnhancedTable from "../components/enhancedTable";
-import { Box, Button, Modal, Paper, TableCell, TableRow, TextField } from "@mui/material";
+import { Box, Button, Modal, Paper, TextField } from "@mui/material";
+import { MinimumTableProps } from "../components/enhancedTable";
+import { fetchDrivers } from "../../../lib/data";
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { fetchDrivers } from "../../../lib/data";
-import { createDriver, deleteDriver, updateDriver } from "../../../lib/actions";
-import { MinimumTableProps } from "../components/enhancedTable";
+import DriversTable from "../components/Tables/driversTable";
 
 export class DriverTableRow extends MinimumTableProps {
     id: string
@@ -33,6 +33,7 @@ export default function Page() {
     }, [selectedId])
 
     const [rows, setRows] = useState<DriverTableRow[]>([])
+    // console.log(rows)
 
     const headCellsDto: { id: keyof DriverTableRow, label: string }[] = [
         {
@@ -105,15 +106,17 @@ export default function Page() {
         }));
     };
 
-    const handleDriverDeletion = () => {
+    const handleDriverDeletion = async () => {
         if (!selectedId) return
-        deleteDriver(selectedId)
+        await deleteDriver(selectedId)
+        await fetchData()
     }
 
     function sendDataForCreation(formData: FormData) {
         try {
             console.log('SEND DATA FOR CREATION')
             createDriver(formData)
+            fetchData()
             toggleCreateModal()
             //TODO: show success alert or success snackbar
         } catch (e) {
@@ -164,18 +167,11 @@ export default function Page() {
                         </Box>
                     </Box>
 
-                    <EnhancedTable<DriverTableRow>
+                    <DriversTable
                         rows={rows}
-                        selected={selectedId}
-                        setSelected={setSelectedId}
-                        headCellsDto={headCellsDto}
-                    >
-                        <TableRow>
-                            <TableCell>
-                                asdasdasd
-                            </TableCell>
-                        </TableRow>
-                    </EnhancedTable>
+                        selectedId={selectedId}
+                        setSelectedId={setSelectedId} 
+                    />
                 </Paper>
             </Box>
 

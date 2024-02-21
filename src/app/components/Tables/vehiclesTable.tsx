@@ -2,50 +2,40 @@ import EnhancedTable, { MinimumTableProps } from "@/app/components/enhancedTable
 import { useMemo, useState } from "react";
 import { TableSortOrder, TableSortingUtils } from "../../../../lib/tableSortingUtils";
 import { Checkbox, TableCell, TableRow } from "@mui/material";
+import { Vehicle } from "../../../../lib/redux/slices";
 
-export class DriverTableRow extends MinimumTableProps {
-    id: string
-    name: string
-    document: string
-    vehicleId: string
 
-    constructor(input?: { id: string, name: string, document: string, vehicleId?: string }) {
-        super(input?.id || '')
-        this.id = input?.id || ''
-        this.name = input?.name || ''
-        this.document = input?.document || ''
-        this.vehicleId = input?.vehicleId || ''
+export class VehicleTableRow extends Vehicle {
+    [key: string]: string
+    constructor(input?: { id: string, carPlate: string, brand: string}){
+        super(input?.id || "", input?.carPlate || "", input?.brand || "")
     }
 }
 
-interface DriverTableProps {
-    rows: DriverTableRow[],
+interface VehicleTableProps {
+    rows: VehicleTableRow[],
     selectedId?: string,
     setSelectedId: React.Dispatch<React.SetStateAction<string | undefined>>
 }
 
-export default function DriversTable({ rows, selectedId, setSelectedId }: DriverTableProps) {
+export default function VehiclesTable({ rows, selectedId, setSelectedId }: VehicleTableProps) {
     const [order, setOrder] = useState<TableSortOrder>('asc');
-    const [orderBy, setOrderBy] = useState<keyof DriverTableRow>('id');
+    const [orderBy, setOrderBy] = useState<keyof VehicleTableRow>('id');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
-    const headCellsDto: { id: keyof DriverTableRow, label: string }[] = [
+    const headCellsDto: {id: keyof VehicleTableRow, label: string}[] = [
         {
             id: 'id',
             label: 'ID',
         },
         {
-            id: 'name',
-            label: 'Nome',
+            id: 'carPlate',
+            label: 'Placa',
         },
         {
-            id: 'document',
-            label: 'Documento',
-        },
-        {
-            id: 'vehicleId',
-            label: 'Vínculo',
+            id: 'brand',
+            label: 'Marca',
         }
     ];
 
@@ -56,12 +46,15 @@ export default function DriversTable({ rows, selectedId, setSelectedId }: Driver
     };
 
     const visibleRows = useMemo(
-        () => TableSortingUtils.createVisibleRows({ rows, order, orderBy, page, rowsPerPage }),
+        () => TableSortingUtils.createVisibleRows({ rows: [...rows], order, orderBy, page, rowsPerPage }),
         [rows, order, orderBy, page, rowsPerPage],
     );
 
+    console.log(visibleRows)
+    console.log(rows)
+
     return (
-        <EnhancedTable<DriverTableRow>
+        <EnhancedTable<VehicleTableRow>
             rows={rows}
             selected={selectedId}
             setSelected={setSelectedId}
@@ -109,11 +102,8 @@ export default function DriversTable({ rows, selectedId, setSelectedId }: Driver
                             {row.id}
                         </TableCell>
 
-                        <TableCell align="right">{row.name}</TableCell>
-                        <TableCell align="right">{row.document}</TableCell>
-                        <TableCell align="right">
-                            {row.vehicleId ? 'sim' : 'não'}
-                        </TableCell>
+                        <TableCell align="right">{row.carPlate}</TableCell>
+                        <TableCell align="right">{row.brand}</TableCell>
                     </TableRow>
                 );
             })}
