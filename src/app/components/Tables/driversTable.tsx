@@ -61,9 +61,15 @@ export default function DriversTable({ rows, selectedId, setSelectedId, error }:
         [rows, order, orderBy, page, rowsPerPage],
     );
 
+    const isLoading = useMemo(
+        () => rows.length === 0,
+        [rows]
+    )
+
     return (
         <EnhancedTable<DriverTableRow>
             rows={rows}
+            isLoading={isLoading}
             selected={selectedId}
             setSelected={setSelectedId}
             headCellsDto={headCellsDto}

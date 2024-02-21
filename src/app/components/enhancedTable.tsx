@@ -17,6 +17,7 @@ interface EnhancedTableProps<T> {
     rowsPerPage: number,
     setRowsPerPage: React.Dispatch<React.SetStateAction<number>>,
     error?: {status: boolean, message: string},
+    isLoading: boolean,
     children?: ReactNode,
 }
 
@@ -38,6 +39,7 @@ export default function EnhancedTable<T extends MinimumTableProps>({
     rowsPerPage,
     setRowsPerPage,
     error,
+    isLoading,
     children
 }: EnhancedTableProps<T>) {
 
@@ -79,11 +81,11 @@ export default function EnhancedTable<T extends MinimumTableProps>({
                     />
                     <TableBody>
                         {
-                            rows.length === 0 ?
+                            isLoading ?
                             <TableRow>
                                 <TableCell align="center" colSpan={5}>
                                     {
-                                        error? 
+                                        error?.status ?  
                                         <p>{error.message}</p>
                                         :
                                         <CircularProgress />

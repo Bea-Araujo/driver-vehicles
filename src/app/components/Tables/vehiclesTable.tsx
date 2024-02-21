@@ -3,6 +3,8 @@ import { useMemo, useState } from "react";
 import { TableSortOrder, TableSortingUtils } from "../../../../lib/tableSortingUtils";
 import { Checkbox, TableCell, TableRow } from "@mui/material";
 import { Vehicle } from "../../../../lib/redux/slices";
+import { useSelector } from "../../../../lib/redux/store";
+import { selectVehicleStatus } from "../../../../lib/redux/slices/vehiclesSlice/selectors";
 
 
 export class VehicleTableRow extends Vehicle {
@@ -23,6 +25,20 @@ export default function VehiclesTable({ rows, selectedId, setSelectedId }: Vehic
     const [orderBy, setOrderBy] = useState<keyof VehicleTableRow>('id');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
+
+    const status = useSelector(selectVehicleStatus)
+    
+    const isLoading = useMemo(
+        () => status === "loading" || status === "failed",
+        [status]
+    )
+
+    const error = useMemo(
+        () => status === "failed"
+            ? {status: true, message: "Falha ao carregar dados"}
+            : {status: false, message: ""},
+        [status]
+    )
 
     const headCellsDto: {id: keyof VehicleTableRow, label: string}[] = [
         {
@@ -53,6 +69,7 @@ export default function VehiclesTable({ rows, selectedId, setSelectedId }: Vehic
     return (
         <EnhancedTable<VehicleTableRow>
             rows={rows}
+            isLoading={isLoading}
             selected={selectedId}
             setSelected={setSelectedId}
             headCellsDto={headCellsDto}
@@ -64,6 +81,7 @@ export default function VehiclesTable({ rows, selectedId, setSelectedId }: Vehic
             setPage={setPage}
             rowsPerPage={rowsPerPage}
             setRowsPerPage={setRowsPerPage}
+            error={error}
         >
             {visibleRows.map((row, index) => {
                 const isItemSelected = isSelected(row.id);

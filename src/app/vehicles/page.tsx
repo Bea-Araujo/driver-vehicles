@@ -5,7 +5,7 @@ import { fetchVehicles } from "../../../lib/data";
 import { createVehicle, deleteDriver, updateVehicle } from "../../../lib/actions";
 import EnhancedTable, { MinimumTableProps } from "../components/enhancedTable";
 import { useDispatch, useSelector } from "react-redux";
-import { selectVehicles, selectVehiclesById } from "../../../lib/redux/slices/vehiclesSlice/selectors";
+import { selectVehicleStatus, selectVehicles, selectVehiclesById } from "../../../lib/redux/slices/vehiclesSlice/selectors";
 
 import { deleteVehicleThunk, fetchVehiclesThunk, saveNewVehicleThunk, updateVehicleThunk } from "../../../lib/redux/slices/vehiclesSlice/thunks";
 import { ReduxDispatch, ReduxState } from "../../../lib/redux/store";
@@ -29,6 +29,8 @@ export default function Page() {
     const dispatch = useDispatch<ReduxDispatch>()
 
     const rows = useSelector(selectVehicles)
+    const status = useSelector(selectVehicleStatus)
+    console.log(status)
     
     const [selectedId, setSelectedId] = useState<string>()
     
