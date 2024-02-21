@@ -1,9 +1,8 @@
 'use client'
-import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Box, Button, Modal, TextField } from "@mui/material";
 import { fetchVehicles } from "../../../lib/data";
-import { createDriver, createVehicle, deleteDriver, updateDriver, updateVehicle } from "../../../lib/actions";
+import { createVehicle, deleteDriver, updateVehicle } from "../../../lib/actions";
 import EnhancedTable, { MinimumTableProps } from "../components/enhancedTable";
 
 
