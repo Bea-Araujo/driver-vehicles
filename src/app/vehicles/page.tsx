@@ -31,10 +31,6 @@ export default function Page() {
     const dispatch = useDispatch<ReduxDispatch>()
     const rows = useSelector(selectVehicles)
 
-    useEffect(() => {
-        console.log('rows changed')
-    }, [rows])
-
     // const test = useSelector((state: ReduxState) => selectVehiclesById(state, "0"))
     // console.log(test)
 
@@ -50,13 +46,13 @@ export default function Page() {
         setEditFormValues(rows.find(row => row.id === selectedId) || new VehicleTableRow())
     }, [selectedId, rows])
 
-    async function fetchData() {
+    const fetchData = useCallback(() => {
         dispatch(fetchVehiclesThunk())
-    }
+    }, [dispatch])
 
     useEffect(() => {
         fetchData()
-    }, [])
+    }, [fetchData])
 
     useEffect(() => {
         updateSelectedVehicleValues()
@@ -104,12 +100,6 @@ export default function Page() {
     return (
         <main>
 
-            {/* <EnhancedTable<VehicleTableRow>
-                rows={rows}
-                selected={selectedId}
-                setSelected={setSelectedId}
-                headCellsDto={headCellsDto}
-            /> */}
             <VehiclesTable 
                 rows={rows}
                 selectedId={selectedId}

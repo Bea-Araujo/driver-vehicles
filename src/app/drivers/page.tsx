@@ -33,26 +33,6 @@ export default function Page() {
     }, [selectedId])
 
     const [rows, setRows] = useState<DriverTableRow[]>([])
-    // console.log(rows)
-
-    const headCellsDto: { id: keyof DriverTableRow, label: string }[] = [
-        {
-            id: 'id',
-            label: 'ID',
-        },
-        {
-            id: 'name',
-            label: 'Nome',
-        },
-        {
-            id: 'document',
-            label: 'Documento',
-        },
-        {
-            id: 'vehicleId',
-            label: 'Vínculo',
-        }
-    ];
 
     const [editFormValues, setEditFormValues] = useState<DriverTableRow>({
         id: "",

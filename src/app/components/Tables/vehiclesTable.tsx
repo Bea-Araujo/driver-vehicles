@@ -1,4 +1,4 @@
-import EnhancedTable, { MinimumTableProps } from "@/app/components/enhancedTable";
+import EnhancedTable from "@/app/components/enhancedTable";
 import { useMemo, useState } from "react";
 import { TableSortOrder, TableSortingUtils } from "../../../../lib/tableSortingUtils";
 import { Checkbox, TableCell, TableRow } from "@mui/material";
@@ -49,9 +49,6 @@ export default function VehiclesTable({ rows, selectedId, setSelectedId }: Vehic
         () => TableSortingUtils.createVisibleRows({ rows: [...rows], order, orderBy, page, rowsPerPage }),
         [rows, order, orderBy, page, rowsPerPage],
     );
-
-    console.log(visibleRows)
-    console.log(rows)
 
     return (
         <EnhancedTable<VehicleTableRow>
