@@ -5,11 +5,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Box, Button, Modal, Paper, TextField } from "@mui/material";
 import { MinimumTableProps } from "../components/enhancedTable";
 import { fetchDrivers } from "../../../lib/data";
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import DriversTable from "../components/Tables/driversTable";
 import TablePaperContainer from "../components/TablePaperContainer/tablePaperContainer";
+import ModalContainer from "../components/ModalContainer/ModalContainer";
 
 export class DriverTableRow extends MinimumTableProps {
     id: string
@@ -106,15 +104,12 @@ export default function Page() {
 
     }
 
-    //TODO: componentiza modals
-    //TODO: componentiza table paper (still have to decide component name)
-
 
     return (
         <main>
 
             <TablePaperContainer
-                areButtonsActive
+                areButtonsActive={areButtonsActive}
                 handleClickCreate={toggleCreateModal}
                 handleClickEdit={toggleEditModal}
                 handleClickDelete={handleDriverDeletion}
@@ -126,91 +121,75 @@ export default function Page() {
                 />
             </TablePaperContainer>
 
-
-            <Modal
-                open={isCreateModalOpen}
+            <ModalContainer
+                isOpen={isCreateModalOpen}
                 onClose={toggleCreateModal}
-                aria-labelledby="parent-modal-title"
-                aria-describedby="parent-modal-description"
-                sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                title="Criar um motorista"
             >
-                <Box sx={{ width: "fit-content", justifySelf: 'center' }}>
-                    <Paper sx={{ p: 2 }}>
-                        <h2 id="parent-modal-title">Criar um novo motorista</h2>
-                        <form action={sendDataForCreation}>
-                            <Box sx={{ width: "100%", display: 'flex', flexWrap: "wrap" , justifyContent: 'space-between', justifySelf: 'center', my: 2, gap: 1 }}>
-                                <TextField id="outlined-basic" label="Nome" variant="outlined" name="name" />
-                                <TextField id="outlined-basic" label="Documento" variant="outlined" name="document" />
-                                <TextField id="outlined-basic" label="Veículo" variant="outlined" name="vehicleId" />
-                            </Box>
+                <form action={sendDataForCreation}>
+                    <Box sx={{ width: "100%", display: 'flex', flexWrap: "wrap", justifyContent: 'space-between', justifySelf: 'center', my: 2, gap: 1 }}>
+                        <TextField id="create-driver-form__name" label="Nome" variant="outlined" name="name" />
+                        <TextField id="create-driver-form__document" label="Documento" variant="outlined" name="document" />
+                        <TextField id="outlined-basic" label="Veículo" variant="outlined" name="vehicleId" />
+                    </Box>
 
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-                                <Button onClick={toggleCreateModal}>Cancelar</Button>
-                                <Button variant="outlined" type="submit">Criar</Button>
-                            </Box>
-                        </form>
-                    </Paper>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+                        <Button onClick={toggleCreateModal}>Cancelar</Button>
+                        <Button variant="outlined" type="submit">Criar</Button>
+                    </Box>
+                </form>
+            </ModalContainer>
 
-                </Box>
-            </Modal>
-
-            <Modal
-                open={isEditModalOpen}
+            <ModalContainer
+                isOpen={isEditModalOpen}
                 onClose={toggleEditModal}
-                aria-labelledby="parent-modal-title"
-                aria-describedby="parent-modal-description"
-                sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                title="Editar um motorista"
             >
-                <Box sx={{ width: 9 / 10, justifySelf: 'center' }}>
-                    <Paper sx={{ p: 2 }}>
-                        <h2 id="parent-modal-title">Editar um motorista</h2>
-                        <form action={(formData) => updateDriver(formData, editFormValues.id)}>
-                            <Box sx={{ width: "100%", display: 'flex', justifyContent: 'space-between', justifySelf: 'center', my: 2, flexWrap: 'wrap', gap: 1 }}>
-                                <TextField
-                                    id="outlined-basic"
-                                    label="ID do motorista"
-                                    variant="outlined"
-                                    name="driverId"
-                                    value={editFormValues?.id}
-                                    disabled
-                                />
+                <form action={(formData) => updateDriver(formData, editFormValues.id)}>
+                    <Box sx={{ width: "100%", display: 'flex', justifyContent: 'space-between', justifySelf: 'center', my: 2, flexWrap: 'wrap', gap: 1 }}>
+                        <TextField
+                            id="edit-driver-form__id"
+                            label="ID do motorista"
+                            variant="outlined"
+                            name="driverId"
+                            value={editFormValues?.id}
+                            disabled
+                        />
 
-                                <TextField
-                                    id="outlined-basic"
-                                    label="Nome"
-                                    variant="outlined"
-                                    name="name"
-                                    value={editFormValues?.name}
-                                    onChange={handleEditFormChange}
-                                />
-                                <TextField
-                                    id="outlined-basic"
-                                    label="Documento"
-                                    variant="outlined"
-                                    name="document"
-                                    value={editFormValues?.document}
-                                    onChange={handleEditFormChange}
-                                />
+                        <TextField
+                            id="edit-driver-form__name"
+                            label="Nome"
+                            variant="outlined"
+                            name="name"
+                            value={editFormValues?.name}
+                            onChange={handleEditFormChange}
+                        />
+                        <TextField
+                            id="edit-driver-form__document"
+                            label="Documento"
+                            variant="outlined"
+                            name="document"
+                            value={editFormValues?.document}
+                            onChange={handleEditFormChange}
+                        />
 
-                                <TextField
-                                    id="outlined-basic"
-                                    label="Veículo"
-                                    variant="outlined"
-                                    name="vehicleId"
-                                    value={editFormValues?.vehicleId}
-                                    onChange={handleEditFormChange}
-                                />
-                            </Box>
+                        <TextField
+                            id="edit-driver-form__vehicle-id"
+                            label="Veículo"
+                            variant="outlined"
+                            name="vehicleId"
+                            value={editFormValues?.vehicleId}
+                            onChange={handleEditFormChange}
+                        />
+                    </Box>
 
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-                                <Button onClick={toggleCreateModal}>Cancelar</Button>
-                                <Button variant="outlined" type="submit">Salvar</Button>
-                            </Box>
-                        </form>
-                    </Paper>
-                </Box>
-            </Modal>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+                        <Button onClick={toggleCreateModal}>Cancelar</Button>
+                        <Button variant="outlined" type="submit">Salvar</Button>
+                    </Box>
+                </form>
 
+            </ModalContainer>
 
         </main>
     )

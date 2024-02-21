@@ -12,6 +12,7 @@ import { ReduxDispatch, ReduxState } from "../../../lib/redux/store";
 import { Vehicle, vehicleAdded, vehicleDeleted } from "../../../lib/redux/slices";
 import VehiclesTable from "../components/Tables/vehiclesTable";
 import TablePaperContainer from "../components/TablePaperContainer/tablePaperContainer";
+import ModalContainer from "../components/ModalContainer/ModalContainer";
 
 
 export class VehicleTableRow extends Vehicle {
@@ -112,13 +113,11 @@ export default function Page() {
     return (
         <main>
             <TablePaperContainer
-                areButtonsActive
+                areButtonsActive={areButtonsActive}
                 handleClickCreate={toggleCreateModal}
                 handleClickEdit={toggleEditModal}
                 handleClickDelete={handleDriverDeletion}
             >
-
-
                 <VehiclesTable
                     rows={rows}
                     selectedId={selectedId}
@@ -126,56 +125,55 @@ export default function Page() {
                 />
             </TablePaperContainer>
 
-
-            <Modal
-                open={isCreateModalOpen}
-                onClose={toggleEditModal}
-                aria-labelledby="parent-modal-title"
-                aria-describedby="parent-modal-description"
-                sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+            <ModalContainer
+                isOpen={isCreateModalOpen}
+                onClose={toggleCreateModal}
+                title="Criar um veículo"
             >
-                <Box sx={{ width: "max-content", justifySelf: 'center' }}>
-                    <Paper sx={{ p: 2 }}>
-                        <h2 id="parent-modal-title">Criar um veículo</h2>
-                        <form action={handleSubmitCreateForm}>
-                            <Box sx={{ width: "100%", display: 'flex', justifyContent: 'space-between', justifySelf: 'center', my: 2, flexWrap: 'wrap', gap: 1 }}>
-                                <TextField id="outlined-basic" label="Placa" variant="outlined" name="carPlate" />
-                                <TextField id="outlined-basic" label="Marca" variant="outlined" name="brand" />
-                            </Box>
+                <form action={handleSubmitCreateForm}>
+                    <Box sx={{ width: "100%", display: 'flex', justifyContent: 'space-between', justifySelf: 'center', my: 2, flexWrap: 'wrap', gap: 1 }}>
+                        <TextField id="create-vehicle-form__car-plate" label="Placa" variant="outlined" name="carPlate" />
+                        <TextField id="create-vehicle-form__brand" label="Marca" variant="outlined" name="brand" />
+                    </Box>
 
 
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-                                <Button onClick={toggleCreateModal}>Cancelar</Button>
-                                <Button variant="outlined" type="submit">Criar</Button>
-                            </Box>
-                        </form>
-                    </Paper>
-                </Box>
-            </Modal>
-
-            <Box sx={{ width: 400 }}>
-                <h2 id="parent-modal-title">Editar um veículo</h2>
-                <form action={handleSubmitEditForm}>
-                    <TextField
-                        id="outlined-basic"
-                        label="Placa"
-                        variant="outlined"
-                        name="carPlate"
-                        value={editFormValues?.carPlate}
-                        onChange={handleEditFormChange}
-                    />
-                    <TextField
-                        id="outlined-basic"
-                        label="Marca"
-                        variant="outlined"
-                        name="brand"
-                        value={editFormValues?.brand}
-                        onChange={handleEditFormChange}
-                    />
-                    <Button type="submit">Send</Button>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+                        <Button onClick={toggleCreateModal}>Cancelar</Button>
+                        <Button variant="outlined" type="submit">Criar</Button>
+                    </Box>
                 </form>
+            </ModalContainer>
 
-            </Box>
+            <ModalContainer
+                isOpen={isEditModalOpen}
+                onClose={toggleEditModal}
+                title="Editar um veículo"
+            > 
+                  <form action={handleSubmitEditForm}>
+                    <Box sx={{ width: "100%", display: 'flex', justifyContent: 'space-between', justifySelf: 'center', my: 2, flexWrap: 'wrap', gap: 1 }}>
+                        <TextField
+                            id="edit-vehicle-form__car-plate"
+                            label="Placa"
+                            variant="outlined"
+                            name="carPlate"
+                            value={editFormValues?.carPlate}
+                            onChange={handleEditFormChange}
+                            />
+                        <TextField
+                            id="edit-vehicle-form__brand"
+                            label="Marca"
+                            variant="outlined"
+                            name="brand"
+                            value={editFormValues?.brand}
+                            onChange={handleEditFormChange}
+                            />
+                    </Box>
+                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+                        <Button onClick={toggleCreateModal}>Cancelar</Button>
+                        <Button variant="outlined" type="submit">Salvar</Button>
+                    </Box>
+                </form>
+            </ModalContainer>
 
         </main>
     )
