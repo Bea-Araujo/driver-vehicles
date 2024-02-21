@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Box, Button, Modal, TextField } from "@mui/material";
 import { fetchVehicles } from "../../../lib/data";
 import { createDriver, deleteDriver, updateDriver } from "../../../lib/actions";
-import EnhancedTable, { MinimumTableProps } from "../../../components/enhancedTable";
+import EnhancedTable, { MinimumTableProps } from "../components/enhancedTable";
 
 
 export class VehicleTableRow extends MinimumTableProps{

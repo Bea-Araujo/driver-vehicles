@@ -1,11 +1,11 @@
 'use client'
 import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import EnhancedTable from "../../../components/enhancedTable";
-import { Box, Button, Modal, TextField } from "@mui/material";
+import EnhancedTable from "../components/enhancedTable";
+import { Box, Button, Modal, TableCell, TableRow, TextField } from "@mui/material";
 import { fetchDrivers } from "../../../lib/data";
 import { createDriver, deleteDriver, updateDriver } from "../../../lib/actions";
-import { MinimumTableProps } from "../../../components/enhancedTable";
+import { MinimumTableProps } from "../components/enhancedTable";
 
 export class DriverTableRow extends MinimumTableProps{
     id: string
@@ -116,7 +116,13 @@ export default function Page() {
                 selected={selectedId}
                 setSelected={setSelectedId}
                 headCellsDto={headCellsDto}
-            />
+            >
+                <TableRow>
+                    <TableCell>
+                        asdasdasd
+                    </TableCell>
+                </TableRow>
+            </EnhancedTable>
             <Button onClick={toggleCreateModal}>Criar</Button>
             <Button disabled={!areButtonsActive} onClick={toggleEditModal}>Editar</Button>
             <Button disabled={!areButtonsActive} onClick={handleDriverDeletion}>Deletar</Button>
