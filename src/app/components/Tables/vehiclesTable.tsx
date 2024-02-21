@@ -29,7 +29,7 @@ export default function VehiclesTable({ rows, selectedId, setSelectedId }: Vehic
     const status = useSelector(selectVehicleStatus)
     
     const isLoading = useMemo(
-        () => status === "loading" || status === "failed",
+        () => status === "loading" || status === "error",
         [status]
     )
 

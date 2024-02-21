@@ -1,3 +1,3 @@
 export * from "./vehiclesSlice";
-// export * from "./thunks";
-// export * from "./selectors";
+export * from "./thunks";
+export * from "./selectors";

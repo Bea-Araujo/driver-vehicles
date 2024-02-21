@@ -1,6 +1,7 @@
 import { createVehicle, deleteVehicle, updateVehicle } from "../../../actions";
 import { fetchVehicles } from "../../../data";
 import { createAppAsyncThunk } from "../../createAppAsyncThunk";
+import { reduxStore } from "../../store";
 
 export const fetchVehiclesThunk = createAppAsyncThunk(
     "vehicles/fetchVehicles",
@@ -21,8 +22,15 @@ export const saveNewVehicleThunk = createAppAsyncThunk(
 export const updateVehicleThunk = createAppAsyncThunk(
     "vehicles/DB/updateVehicle",
     async(payload: {vehicleId: string, formData: FormData}) => {
-        const response = await updateVehicle(payload.formData, payload.vehicleId)
-        return response
+        try {            
+            await updateVehicle(payload.formData, payload.vehicleId)
+            const data = await fetchVehicles()
+
+            return data
+        } catch (error) {
+            console.log('CATCHUP')
+            throw new Error('deu ruim')
+        }
     }
 )
 

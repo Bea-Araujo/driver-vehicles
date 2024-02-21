@@ -55,8 +55,8 @@ export default function Page() {
         setEditFormValues(rows.find(row => row.id === selectedId) || new VehicleTableRow())
     }, [selectedId, rows])
 
-    const fetchData = useCallback(() => {
-            dispatch(fetchVehiclesThunk())
+    const fetchData = useCallback(async () => {
+            await dispatch(fetchVehiclesThunk())
     }, [dispatch])
 
     useEffect(() => {
@@ -74,32 +74,44 @@ export default function Page() {
         }));
     };
 
+
     function handleSubmitCreateForm(formData: FormData) {
         const payload = {
             formData: formData,
         }
         try {
             dispatch(saveNewVehicleThunk(payload))
+            if (status === 'failed') throw new Error("Falha ao atualizar veículo")
             fetchData()
             toggleCreateModal()
-            //TODO: show success alert or success snackbar
-        } catch (error) {
-            //TODO: show error alert or error snackbar
+            enqueueSnackbar("deu boa", { variant: "success" })            
+        } catch (e) {
+            const error: Error = e as Error
+            enqueueSnackbar(error.message, { variant: "error" })
         }
     }
 
-    function handleSubmitEditForm(formData: FormData) {
+    useEffect(() => {
+        console.log('aaa')
+        if (status === 'failed') enqueueSnackbar("Falha ao atualizar veículo", { variant: "error" })
+    }, [status])
+
+    async function handleSubmitEditForm(formData: FormData) {
         const payload = {
             vehicleId: editFormValues.id,
             formData: formData,
         }
         try {
-            dispatch(updateVehicleThunk(payload))
-            fetchData()
+            const a = await dispatch(updateVehicleThunk(payload))
+            console.log('STRING ON THE SIDE', status)
+            if (status === 'failed') throw new Error("Falha ao atualizar veículo")
+            // fetchData()
+            
             toggleEditModal()
-            //TODO: show success alert or success snackbar
-        } catch (error) {
-            //TODO: show error alert or error snackbar
+            enqueueSnackbar("Veículo atualizado com sucesso!", { variant: "success" })
+        } catch (e) {
+            const error: Error = e as Error
+            enqueueSnackbar(error.message, { variant: "error" })
         }
     }
 
@@ -187,7 +199,7 @@ export default function Page() {
                             />
                     </Box>
                      <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-                        <Button onClick={toggleCreateModal}>Cancelar</Button>
+                        <Button onClick={toggleEditModal}>Cancelar</Button>
                         <Button variant="outlined" type="submit">Salvar</Button>
                     </Box>
                 </form>
