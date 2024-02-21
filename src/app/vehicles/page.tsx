@@ -13,6 +13,7 @@ import { Vehicle, vehicleAdded, vehicleDeleted } from "../../../lib/redux/slices
 import VehiclesTable from "../components/Tables/vehiclesTable";
 import TablePaperContainer from "../components/TablePaperContainer/tablePaperContainer";
 import ModalContainer from "../components/ModalContainer/ModalContainer";
+import { useSnackbar } from "notistack";
 
 
 export class VehicleTableRow extends Vehicle {
@@ -24,23 +25,28 @@ export class VehicleTableRow extends Vehicle {
 
 
 export default function Page() {
-    const [selectedId, setSelectedId] = useState<string>()
-
-    const areButtonsActive = useMemo(() => {
-        return !!selectedId
-    }, [selectedId])
-
+    const { enqueueSnackbar } = useSnackbar();
     const dispatch = useDispatch<ReduxDispatch>()
+
     const rows = useSelector(selectVehicles)
-
-    // const test = useSelector((state: ReduxState) => selectVehiclesById(state, "0"))
-    // console.log(test)
-
+    
+    const [selectedId, setSelectedId] = useState<string>()
+    
     const [editFormValues, setEditFormValues] = useState<VehicleTableRow>({
         id: "",
         carPlate: "",
         brand: ""
     })
+
+    const [error, setError] = useState({status: false, message: ''})
+
+    const areButtonsActive = useMemo(() => {
+        return !!selectedId
+    }, [selectedId])
+
+
+    // const test = useSelector((state: ReduxState) => selectVehiclesById(state, "0"))
+    // console.log(test)
 
     const updateSelectedVehicleValues = useCallback(() => {
         if (!rows) return
@@ -49,7 +55,7 @@ export default function Page() {
     }, [selectedId, rows])
 
     const fetchData = useCallback(() => {
-        dispatch(fetchVehiclesThunk())
+            dispatch(fetchVehiclesThunk())
     }, [dispatch])
 
     useEffect(() => {
@@ -60,11 +66,6 @@ export default function Page() {
         updateSelectedVehicleValues()
     }, [selectedId, updateSelectedVehicleValues])
 
-    const [isOpen, setIsOpen] = useState(false)
-    function toggleModal() {
-        setIsOpen((prev) => !prev)
-    }
-
     const handleEditFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEditFormValues((prev) => ({
             ...prev,
@@ -72,13 +73,18 @@ export default function Page() {
         }));
     };
 
-
     function handleSubmitCreateForm(formData: FormData) {
         const payload = {
             formData: formData,
         }
-        dispatch(saveNewVehicleThunk(payload))
-        fetchData()
+        try {
+            dispatch(saveNewVehicleThunk(payload))
+            fetchData()
+            toggleCreateModal()
+            //TODO: show success alert or success snackbar
+        } catch (error) {
+            //TODO: show error alert or error snackbar
+        }
     }
 
     function handleSubmitEditForm(formData: FormData) {
@@ -86,17 +92,27 @@ export default function Page() {
             vehicleId: editFormValues.id,
             formData: formData,
         }
-        dispatch(updateVehicleThunk(payload))
-        fetchData()
+        try {
+            dispatch(updateVehicleThunk(payload))
+            fetchData()
+            toggleEditModal()
+            //TODO: show success alert or success snackbar
+        } catch (error) {
+            //TODO: show error alert or error snackbar
+        }
     }
 
-    const handleDriverDeletion = () => {
+    const handleVehicleDeletion = () => {
         const payload = {
             vehicleId: editFormValues.id
         }
-        dispatch(deleteVehicleThunk(payload))
-        dispatch(vehicleDeleted(editFormValues.id))
-        // fetchData()
+        try {
+            dispatch(deleteVehicleThunk(payload))
+            dispatch(vehicleDeleted(editFormValues.id))
+            //TODO: show success alert or success snackbar
+        } catch (error) {
+            //TODO: show error alert or error snackbar
+        }
     }
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
@@ -116,7 +132,7 @@ export default function Page() {
                 areButtonsActive={areButtonsActive}
                 handleClickCreate={toggleCreateModal}
                 handleClickEdit={toggleEditModal}
-                handleClickDelete={handleDriverDeletion}
+                handleClickDelete={handleVehicleDeletion}
             >
                 <VehiclesTable
                     rows={rows}

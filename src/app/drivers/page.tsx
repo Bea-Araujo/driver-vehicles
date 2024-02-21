@@ -2,12 +2,14 @@
 
 import { createDriver, deleteDriver, updateDriver } from "../../../lib/actions";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Box, Button, Modal, Paper, TextField } from "@mui/material";
+import { Box, Button, Modal, Paper, Snackbar, TextField } from "@mui/material";
 import { MinimumTableProps } from "../components/enhancedTable";
 import { fetchDrivers } from "../../../lib/data";
 import DriversTable from "../components/Tables/driversTable";
 import TablePaperContainer from "../components/TablePaperContainer/tablePaperContainer";
 import ModalContainer from "../components/ModalContainer/ModalContainer";
+
+import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
 
 export class DriverTableRow extends MinimumTableProps {
     id: string
@@ -25,11 +27,8 @@ export class DriverTableRow extends MinimumTableProps {
 }
 
 export default function Page() {
+    const { enqueueSnackbar } = useSnackbar();
     const [selectedId, setSelectedId] = useState<string>()
-
-    const areButtonsActive = useMemo(() => {
-        return !!selectedId
-    }, [selectedId])
 
     const [rows, setRows] = useState<DriverTableRow[]>([])
 
@@ -40,10 +39,11 @@ export default function Page() {
         vehicleId: ""
     })
 
-    const updateSelectedDriverValues = useCallback(() => {
-        if (rows.length === 0) return
-        setEditFormValues(rows.find(row => row.id === selectedId) || new DriverTableRow())
-    }, [selectedId, rows])
+    const [error, setError] = useState({status: false, message: ''})
+
+    const areButtonsActive = useMemo(() => {
+        return !!selectedId
+    }, [selectedId])
 
     const selectedDriverDisplayData = useMemo(() => {
         return {
@@ -54,9 +54,21 @@ export default function Page() {
         }
     }, [selectedId])
 
+    const updateSelectedDriverValues = useCallback(() => {
+        if (rows.length === 0) return
+        setEditFormValues(rows.find(row => row.id === selectedId) || new DriverTableRow())
+    }, [selectedId, rows])
+
     async function fetchData() {
-        const response = await fetchDrivers()
-        setRows(response)
+        try {
+            const response = await fetchDrivers()
+            if (!response) throw new Error("Erro ao carregar dados")
+            setRows(response)
+        } catch (e){
+            const error: Error = e as Error;
+            setError({status: true, message: error.message})
+            enqueueSnackbar(error.message, { variant: "error" })
+        }
     }
 
     useEffect(() => {
@@ -66,6 +78,54 @@ export default function Page() {
     useEffect(() => {
         updateSelectedDriverValues()
     }, [selectedId, updateSelectedDriverValues])
+
+    const handleEditFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setEditFormValues((prev) => ({
+            ...prev,
+            [event.target.name]: event.target.value,
+        }));
+    };
+
+    function handleSubmitCreateForm(formData: FormData) {
+        try {
+            createDriver(formData)
+            fetchData()
+            toggleCreateModal()
+            //TODO: show success alert or success snackbar
+            enqueueSnackbar("Motorista criado com sucesso!", { variant: "success" })
+        } catch (e) {
+            //TODO: show error alert or error snackbar
+            enqueueSnackbar("Erro ao criar motorista", { variant: "error" })
+        }
+
+    }
+
+    function handleSubmitEditForm(formData: FormData) {
+        try {
+            updateDriver(formData, editFormValues.id)
+            fetchData()
+            toggleEditModal()
+            //TODO: show success alert or success snackbar
+            enqueueSnackbar("Motorista atualizar com sucesso!", { variant: "success" })
+        } catch (e) {
+            //TODO: show error alert or error snackbar
+            enqueueSnackbar("Erro ao atualizar motorista", { variant: "error" })
+
+        }
+    }
+
+    const handleDriverDeletion = async () => {
+        try {
+            if (!selectedId) return
+            await deleteDriver(selectedId)
+            await fetchData()
+            //TODO: show success alert or success snackbar
+            enqueueSnackbar("Motorista deletado com sucesso!", { variant: "success" })
+        } catch (error) {
+            //TODO: show error alert or error snackbar
+            enqueueSnackbar("Erro ao deletar motorista", { variant: "error" })
+        }
+    }
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
@@ -78,36 +138,8 @@ export default function Page() {
         setIsCreateModalOpen((prev) => !prev)
     }
 
-    const handleEditFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setEditFormValues((prev) => ({
-            ...prev,
-            [event.target.name]: event.target.value,
-        }));
-    };
-
-    const handleDriverDeletion = async () => {
-        if (!selectedId) return
-        await deleteDriver(selectedId)
-        await fetchData()
-    }
-
-    function sendDataForCreation(formData: FormData) {
-        try {
-            console.log('SEND DATA FOR CREATION')
-            createDriver(formData)
-            fetchData()
-            toggleCreateModal()
-            //TODO: show success alert or success snackbar
-        } catch (e) {
-            //TODO: show error alert or error snackbar
-        }
-
-    }
-
-
     return (
         <main>
-
             <TablePaperContainer
                 areButtonsActive={areButtonsActive}
                 handleClickCreate={toggleCreateModal}
@@ -118,6 +150,7 @@ export default function Page() {
                     rows={rows}
                     selectedId={selectedId}
                     setSelectedId={setSelectedId}
+                    error={error}
                 />
             </TablePaperContainer>
 
@@ -126,7 +159,7 @@ export default function Page() {
                 onClose={toggleCreateModal}
                 title="Criar um motorista"
             >
-                <form action={sendDataForCreation}>
+                <form action={handleSubmitCreateForm}>
                     <Box sx={{ width: "100%", display: 'flex', flexWrap: "wrap", justifyContent: 'space-between', justifySelf: 'center', my: 2, gap: 1 }}>
                         <TextField id="create-driver-form__name" label="Nome" variant="outlined" name="name" />
                         <TextField id="create-driver-form__document" label="Documento" variant="outlined" name="document" />
@@ -145,7 +178,7 @@ export default function Page() {
                 onClose={toggleEditModal}
                 title="Editar um motorista"
             >
-                <form action={(formData) => updateDriver(formData, editFormValues.id)}>
+                <form action={handleSubmitEditForm}>
                     <Box sx={{ width: "100%", display: 'flex', justifyContent: 'space-between', justifySelf: 'center', my: 2, flexWrap: 'wrap', gap: 1 }}>
                         <TextField
                             id="edit-driver-form__id"

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { EnhancedTableHead } from './enhancedTableHead';
-import { Box, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow } from '@mui/material';
+import { Box, CircularProgress, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow } from '@mui/material';
 import { TableSortOrder } from '../../../lib/tableSortingUtils';
 
 interface EnhancedTableProps<T> {
@@ -16,8 +16,8 @@ interface EnhancedTableProps<T> {
     setPage: React.Dispatch<React.SetStateAction<number>>,
     rowsPerPage: number,
     setRowsPerPage: React.Dispatch<React.SetStateAction<number>>,
-
-    children?: ReactNode
+    error?: {status: boolean, message: string},
+    children?: ReactNode,
 }
 
 export class MinimumTableProps {
@@ -29,8 +29,6 @@ export class MinimumTableProps {
 export default function EnhancedTable<T extends MinimumTableProps>({
     rows,
     headCellsDto,
-    selected,
-    setSelected,
     order,
     setOrder,
     orderBy,
@@ -39,6 +37,7 @@ export default function EnhancedTable<T extends MinimumTableProps>({
     setPage,
     rowsPerPage,
     setRowsPerPage,
+    error,
     children
 }: EnhancedTableProps<T>) {
 
@@ -79,7 +78,19 @@ export default function EnhancedTable<T extends MinimumTableProps>({
                         headCellsDTO={headCellsDto}
                     />
                     <TableBody>
-                        {children}
+                        {
+                            rows.length === 0 ?
+                            <TableRow>
+                                <TableCell align="center" colSpan={5}>
+                                    {
+                                        error? 
+                                        <p>{error.message}</p>
+                                        :
+                                        <CircularProgress />
+                                    }
+                                </TableCell>
+                            </TableRow>
+                            : children}
                         {emptyRows > 0 && (
                             <TableRow
                                 style={{

@@ -1,7 +1,7 @@
 import EnhancedTable, { MinimumTableProps } from "@/app/components/enhancedTable";
 import { useMemo, useState } from "react";
 import { TableSortOrder, TableSortingUtils } from "../../../../lib/tableSortingUtils";
-import { Checkbox, TableCell, TableRow } from "@mui/material";
+import { Checkbox, CircularProgress, TableCell, TableRow } from "@mui/material";
 
 export class DriverTableRow extends MinimumTableProps {
     id: string
@@ -21,10 +21,11 @@ export class DriverTableRow extends MinimumTableProps {
 interface DriverTableProps {
     rows: DriverTableRow[],
     selectedId?: string,
-    setSelectedId: React.Dispatch<React.SetStateAction<string | undefined>>
+    setSelectedId: React.Dispatch<React.SetStateAction<string | undefined>>,
+    error?: {status: boolean, message: string}
 }
 
-export default function DriversTable({ rows, selectedId, setSelectedId }: DriverTableProps) {
+export default function DriversTable({ rows, selectedId, setSelectedId, error }: DriverTableProps) {
     const [order, setOrder] = useState<TableSortOrder>('asc');
     const [orderBy, setOrderBy] = useState<keyof DriverTableRow>('id');
     const [page, setPage] = useState(0);
@@ -74,6 +75,7 @@ export default function DriversTable({ rows, selectedId, setSelectedId }: Driver
             setPage={setPage}
             rowsPerPage={rowsPerPage}
             setRowsPerPage={setRowsPerPage}
+            error={error}
         >
             {visibleRows.map((row, index) => {
                 const isItemSelected = isSelected(row.id);
