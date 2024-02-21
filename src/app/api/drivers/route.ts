@@ -35,7 +35,6 @@ export async function POST(request: Request) {
 
         return NextResponse.json({message: "Driver added successfully"}, {status: 200})
     } catch (error) {
-        console.log(error)
         return NextResponse.json({message: "Error", error}, {status: 500})
     }
 }

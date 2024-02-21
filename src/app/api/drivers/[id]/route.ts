@@ -13,7 +13,6 @@ export async function GET(request: Request, context: {params: {id: string}}) {
 }
 
 export async function PUT(request: Request, context: {params: {id: string}}) {
-    console.log("PUT REQUEST")
     const driverId = context.params.id
     try {
         const {name, document, vehicleId} = await request.json()
@@ -36,7 +35,6 @@ export async function PUT(request: Request, context: {params: {id: string}}) {
 }
 
 export async function DELETE(request: Request, context: {params: {id: string}}) {
-    console.log("DELETE REQUEST")
     const driverId = context.params.id
     try {
         

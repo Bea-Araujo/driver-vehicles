@@ -30,8 +30,6 @@ export const updateDriver = async (formData: FormData, id:string) => {
             vehicleId
         }
 
-        console.log(updatedDriverData)
-    
         const response = await fetch(`http://localhost:3000/api/drivers/${id}`, {
             method: "PUT",
             headers: {

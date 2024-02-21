@@ -27,7 +27,6 @@ export default function Page() {
     }, [selectedId])
 
     const [rows, setRows] = useState<VehicleTableRow[]>([])
-    console.log(rows)
     
     const headCellsDto: {id: keyof VehicleTableRow, label: string}[] = [
         {
@@ -58,7 +57,6 @@ export default function Page() {
 
     async function fetchData() {
         const response = await fetchVehicles()
-        console.log(response)
         setRows(response)
     }
 
