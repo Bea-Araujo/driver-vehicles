@@ -93,6 +93,7 @@ export default function EnhancedTable<T extends MinimumTableProps>({
                 </Table>
             </TableContainer>
             <TablePagination
+                id={`enhanced-table-pagination-input`}
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
                 count={rows.length}

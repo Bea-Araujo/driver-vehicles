@@ -86,12 +86,13 @@ export default function DriversTable({ rows, selectedId, setSelectedId }: Driver
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={row.id}
+                        key={`drivers-table__row-${row.id}`}
                         selected={isItemSelected}
                         sx={{ cursor: 'pointer' }}
                     >
                         <TableCell padding="checkbox">
                             <Checkbox
+                                id={`drivers-table__row-${row.id}__checkbox-input`}
                                 color="primary"
                                 checked={isItemSelected}
                                 inputProps={{

@@ -82,6 +82,7 @@ export default function VehiclesTable({ rows, selectedId, setSelectedId }: Vehic
                     >
                         <TableCell padding="checkbox">
                             <Checkbox
+                                id={`vehicles-table__row-${row.id}__checkbox-input`}
                                 color="primary"
                                 checked={isItemSelected}
                                 inputProps={{
