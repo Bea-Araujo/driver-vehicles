@@ -9,6 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DriversTable from "../components/Tables/driversTable";
+import TablePaperContainer from "../components/TablePaperContainer/tablePaperContainer";
 
 export class DriverTableRow extends MinimumTableProps {
     id: string
@@ -111,49 +112,20 @@ export default function Page() {
 
     return (
         <main>
-            <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                <Paper sx={{ width: '95%', mb: 2 }}>
-                    <Box sx={{ mt: 1, ml: 1, display: "flex", justifyContent: "space-between" }}>
-                        <Button
-                            variant="contained"
-                            sx={{ mr: 1 }}
-                            onClick={toggleCreateModal}
-                            startIcon={<AddIcon />}
-                        >
-                            Criar
-                        </Button>
 
-                        <Box>
-                            <Button
-                                variant="outlined"
-                                sx={{ mr: 1 }}
-                                disabled={!areButtonsActive}
-                                onClick={toggleEditModal}
-                                startIcon={<EditIcon />}
-                            >
-                                Editar
-                            </Button>
+            <TablePaperContainer
+                areButtonsActive
+                handleClickCreate={toggleCreateModal}
+                handleClickEdit={toggleEditModal}
+                handleClickDelete={handleDriverDeletion}
+            >
+                <DriversTable
+                    rows={rows}
+                    selectedId={selectedId}
+                    setSelectedId={setSelectedId}
+                />
+            </TablePaperContainer>
 
-                            <Button
-                                variant="outlined"
-                                color="error"
-                                sx={{ mr: 1 }}
-                                disabled={!areButtonsActive}
-                                onClick={handleDriverDeletion}
-                                startIcon={<DeleteIcon />}
-                            >
-                                Deletar
-                            </Button>
-                        </Box>
-                    </Box>
-
-                    <DriversTable
-                        rows={rows}
-                        selectedId={selectedId}
-                        setSelectedId={setSelectedId} 
-                    />
-                </Paper>
-            </Box>
 
             <Modal
                 open={isCreateModalOpen}
@@ -162,11 +134,11 @@ export default function Page() {
                 aria-describedby="parent-modal-description"
                 sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
             >
-                <Box sx={{ width: 9 / 10, justifySelf: 'center' }}>
+                <Box sx={{ width: "fit-content", justifySelf: 'center' }}>
                     <Paper sx={{ p: 2 }}>
                         <h2 id="parent-modal-title">Criar um novo motorista</h2>
                         <form action={sendDataForCreation}>
-                            <Box sx={{ width: "100%", display: 'flex', justifyContent: 'space-between', justifySelf: 'center', my: 2 }}>
+                            <Box sx={{ width: "100%", display: 'flex', flexWrap: "wrap" , justifyContent: 'space-between', justifySelf: 'center', my: 2, gap: 1 }}>
                                 <TextField id="outlined-basic" label="Nome" variant="outlined" name="name" />
                                 <TextField id="outlined-basic" label="Documento" variant="outlined" name="document" />
                                 <TextField id="outlined-basic" label="Veículo" variant="outlined" name="vehicleId" />
