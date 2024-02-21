@@ -1,12 +1,6 @@
 {
   "drivers": [
     {
-      "id": 1,
-      "name": "Filomeno",
-      "document": "99999999999",
-      "vehicleId": "1"
-    },
-    {
       "id": 2,
       "name": "Godofreda",
       "document": "99999999999",
@@ -74,6 +68,23 @@
       "name": "Godofreda",
       "document": "99999999999",
       "id": 13
+    }
+  ],
+  "vehicles":[
+    {
+      "id": 0,
+      "carPlate": "aaa555",
+      "brand": "car"
+    },
+    {
+      "id": 2,
+      "carPlate": "aaa556",
+      "brand": "caritos"
+    },
+    {
+      "id": 3,
+      "carPlate": "aaa557",
+      "brand": "caritozitos"
     }
   ]
 }
