@@ -12,7 +12,6 @@ export const fetchDrivers = async() => {
         const {drivers} = await response.json()
         return drivers
     } catch (error) {
-        console.log(error)
         throw new Error("Failed to GET drivers")
     }
 }
@@ -30,7 +29,6 @@ export const fetchVehicles = async() => {
         
         return data
     } catch (error) {
-        console.log(error)
         throw new Error("Failed to GET vehicles")
     }
 }
