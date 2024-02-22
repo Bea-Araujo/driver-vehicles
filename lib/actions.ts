@@ -1,14 +1,16 @@
+import { fetchDrivers } from "./data"
 
-export const createDriver = async (formData: FormData) => {
+export const createDriver = async (formData: FormData, id?: string) => {
     try {
         const { name, document, vehicleId } = Object.fromEntries(formData)
         const newDriver = {
+            id,
             name,
             document,
-            vehicleId
+            vehicleId: vehicleId || ''
         }
     
-        const response = await fetch('http://localhost:3000/api/drivers', {
+        const response = await fetch('http://localhost:8000/drivers', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -30,7 +32,7 @@ export const updateDriver = async (formData: FormData, id:string) => {
             vehicleId
         }
 
-        const response = await fetch(`http://localhost:3000/api/drivers/${id}`, {
+        const response = await fetch(`http://localhost:8000/drivers/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -44,13 +46,18 @@ export const updateDriver = async (formData: FormData, id:string) => {
 
 export const deleteDriver = async (driverId: string) => {
     try {
-        const response = await fetch(`http://localhost:3000/api/drivers/${driverId}`, {
+        const response = await fetch(`http://localhost:8000/drivers/${driverId}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
             }
         })
+
+        const drivers = await fetchDrivers()
+        const a = await drivers
+        console.log('A', a)
     } catch (error) {
+        console.error(error)
         throw new Error('Failed to delete driver')
     }
 }
