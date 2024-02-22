@@ -1,15 +1,10 @@
 'use client'
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Box, Button, Modal, Paper, TextField, Typography } from "@mui/material";
-import { fetchVehicles } from "../../../lib/data";
-import { createVehicle, deleteDriver, updateVehicle } from "../../../lib/actions";
-import EnhancedTable, { MinimumTableProps } from "../components/enhancedTable";
+import { useEffect, useMemo, useState } from "react";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { selectVehicleStatus, selectVehicles, selectVehiclesById } from "../../../lib/redux/slices/vehiclesSlice/selectors";
-
+import { selectVehicleStatus, selectVehicles } from "../../../lib/redux/slices/vehiclesSlice/selectors";
 import { deleteVehicleThunk, fetchVehiclesThunk, saveNewVehicleThunk, updateVehicleThunk } from "../../../lib/redux/slices/vehiclesSlice/thunks";
-import { ReduxDispatch, ReduxState } from "../../../lib/redux/store";
-import { Vehicle, vehicleAdded, vehicleDeleted } from "../../../lib/redux/slices";
+import { ReduxDispatch } from "../../../lib/redux/store";
 import VehiclesTable, { VehicleTableRow } from "../components/Tables/vehiclesTable";
 import TablePaperContainer from "../components/TablePaperContainer/tablePaperContainer";
 import ModalContainer from "../components/ModalContainer/ModalContainer";
@@ -30,18 +25,13 @@ export default function Page() {
         brand: ""
     })
 
-    const [error, setError] = useState({ status: false, message: '' })
-
     const areButtonsActive = useMemo(() => {
         return !!selectedId
     }, [selectedId])
 
-
-    // const test = useSelector((state: ReduxState) => selectVehiclesById(state, "0"))
-    // console.log(test)
-
     const updateEditFormValues = () => {
-        setEditFormValues(rows.find(row => row.id === selectedId) || new VehicleTableRow())
+        const vehicle = rows.find(row => row.id === selectedId);
+        setEditFormValues(vehicle || new VehicleTableRow())
     }
 
     const fetchData = (): void => {
@@ -75,7 +65,7 @@ export default function Page() {
 
     async function handleSubmitEditForm(formData: FormData) {
         const payload = {
-            vehicleId: editFormValues.id,
+            vehicleId: selectedId || '',
             formData: formData,
         }
         try {
@@ -89,9 +79,9 @@ export default function Page() {
         }
     }
 
-    async function handleVehicleDeletion() {
+    async function handleVehicleDeletion() {        
         const payload = {
-            vehicleId: editFormValues.id
+            vehicleId: selectedId || ''
         }
         try {
             await dispatch(deleteVehicleThunk(payload)).unwrap()

@@ -1,67 +1,10 @@
 {
-  "drivers": [
-    {
-      "name": "Driver 1",
-      "document": "99999999999",
-      "vehicleId": "IpcGRvT",
-      "id": "_HGbe_k"
-    },
-    {
-      "name": "Driver 1",
-      "document": "99999999999",
-      "vehicleId": "IpcGRvT",
-      "id": "NtzGMdl"
-    },
-    {
-      "name": "Driver 1",
-      "document": "99999999999",
-      "vehicleId": "IpcGRvT",
-      "id": "lypVnFG"
-    },
-    {
-      "name": "Driver 1",
-      "document": "99999999999",
-      "vehicleId": "IpcGRvT",
-      "id": "lKCXXqF"
-    },
-    {
-      "name": "Driver 1",
-      "document": "99999999999",
-      "vehicleId": "IpcGRvT",
-      "id": "iknnEBb"
-    },
-    {
-      "name": "Driver 1",
-      "document": "99999999999",
-      "vehicleId": "IpcGRvT",
-      "id": "hBaWZHP"
-    }
-  ],
+  "drivers": [],
   "vehicles": [
-    {
-      "carPlate": "asdsa",
-      "brand": "asads",
-      "id": "ypuBHH5"
-    },
-    {
-      "carPlate": "placa 1",
-      "brand": "marca 1",
-      "id": "IpcGRvT"
-    },
-    {
-      "carPlate": "placa 2",
-      "brand": "marca 2",
-      "id": "E4_e9t2"
-    },
     {
       "carPlate": "placa 3",
       "brand": "marca 3",
       "id": "hNTjbBR"
-    },
-    {
-      "carPlate": "plaquinha da hora",
-      "brand": "brand",
-      "id": "qSKioUs"
     },
     {
       "carPlate": "placa 3",
@@ -82,11 +25,6 @@
       "carPlate": "placa 1",
       "brand": "marca 1",
       "id": "J1SouPU"
-    },
-    {
-      "carPlate": "placa 2",
-      "brand": "marca 2",
-      "id": "BxfUm02"
     }
   ]
 }
