@@ -1,7 +1,7 @@
 
 export const fetchDrivers = async() => {
     try {
-        const response = await fetch('http://localhost:8000/drivers', {
+        const response = await fetch('https://json-server-seven-psi.vercel.app/drivers', {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -16,7 +16,7 @@ export const fetchDrivers = async() => {
 
 export const fetchVehicles = async() => {
     try {
-        const response = await fetch('http://localhost:8000/vehicles', {
+        const response = await fetch('https://json-server-seven-psi.vercel.app/vehicles', {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"

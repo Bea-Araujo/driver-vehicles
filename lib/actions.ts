@@ -10,7 +10,7 @@ export const createDriver = async (formData: FormData, id?: string) => {
             vehicleId: vehicleId || ''
         }
     
-        const response = await fetch('http://localhost:8000/drivers', {
+        const response = await fetch('https://json-server-seven-psi.vercel.app/drivers', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -32,7 +32,7 @@ export const updateDriver = async (formData: FormData, id:string) => {
             vehicleId
         }
 
-        const response = await fetch(`http://localhost:8000/drivers/${id}`, {
+        const response = await fetch(`https://json-server-seven-psi.vercel.app/drivers/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -46,16 +46,13 @@ export const updateDriver = async (formData: FormData, id:string) => {
 
 export const deleteDriver = async (driverId: string) => {
     try {
-        const response = await fetch(`http://localhost:8000/drivers/${driverId}`, {
+        const response = await fetch(`https://json-server-seven-psi.vercel.app/drivers/${driverId}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
             }
         })
 
-        const drivers = await fetchDrivers()
-        const a = await drivers
-        console.log('A', a)
     } catch (error) {
         console.error(error)
         throw new Error('Failed to delete driver')
@@ -70,7 +67,7 @@ export const createVehicle = async (formData: FormData) => {
             brand,
         }
     
-        const response = await fetch('http://localhost:8000/vehicles', {
+        const response = await fetch('https://json-server-seven-psi.vercel.app/vehicles', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -91,7 +88,7 @@ export const updateVehicle = async (formData: FormData, vehicleId: string) => {
         }
 
 
-        const response = await fetch(`http://localhost:8000/vehicles/${vehicleId}`, {
+        const response = await fetch(`https://json-server-seven-psi.vercel.app/vehicles/${vehicleId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -105,7 +102,7 @@ export const updateVehicle = async (formData: FormData, vehicleId: string) => {
 
 export const deleteVehicle = async (vehicleId: string) => {
     try {
-        const response = await fetch(`http://localhost:8000/vehicles/${vehicleId}`, {
+        const response = await fetch(`https://json-server-seven-psi.vercel.app/vehicles/${vehicleId}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
