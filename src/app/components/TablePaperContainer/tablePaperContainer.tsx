@@ -12,44 +12,44 @@ interface TablePaperContainerProps {
     handleClickEdit: () => void;
     handleClickDelete: () => void;
 }
-export default function TablePaperContainer({areButtonsActive, handleClickCreate, handleClickEdit, handleClickDelete, children}: TablePaperContainerProps) {
+export default function TablePaperContainer({ areButtonsActive, handleClickCreate, handleClickEdit, handleClickDelete, children }: TablePaperContainerProps) {
     return (
-                <Paper sx={{ width: '100%', mb: 2 }}>
-                    <Box sx={{ pt: 1.5, ml: 1, display: "flex", justifyContent: "space-between" }}>
-                        <Button
-                            variant="contained"
-                            sx={{ mr: 1 }}
-                            onClick={handleClickCreate}
-                            startIcon={<AddIcon />}
-                        >
-                            Criar
-                        </Button>
+        <Paper sx={{ width: '100%', mb: 2 }}>
+            <Box sx={{ pt: 1.5, ml: 1, display: "flex", justifyContent: "space-between" }}>
+                <Button
+                    variant="contained"
+                    sx={{ mr: 1 }}
+                    onClick={handleClickCreate}
+                    startIcon={<AddIcon />}
+                >
+                    Criar
+                </Button>
 
-                        <Box>
-                            <Button
-                                variant="outlined"
-                                sx={{ mr: 1 }}
-                                disabled={!areButtonsActive}
-                                onClick={handleClickEdit}
-                                startIcon={<EditIcon />}
-                            >
-                                Editar
-                            </Button>
+                <Box>
+                    <Button
+                        variant="outlined"
+                        sx={{ mr: 1 }}
+                        disabled={!areButtonsActive}
+                        onClick={handleClickEdit}
+                        startIcon={<EditIcon />}
+                    >
+                        Editar
+                    </Button>
 
-                            <Button
-                                variant="outlined"
-                                color="error"
-                                sx={{ mr: 1 }}
-                                disabled={!areButtonsActive}
-                                onClick={handleClickDelete}
-                                startIcon={<DeleteIcon />}
-                            >
-                                Deletar
-                            </Button>
-                        </Box>
-                    </Box>
+                    <Button
+                        variant="outlined"
+                        color="error"
+                        sx={{ mr: 1 }}
+                        disabled={!areButtonsActive}
+                        onClick={handleClickDelete}
+                        startIcon={<DeleteIcon />}
+                    >
+                        Deletar
+                    </Button>
+                </Box>
+            </Box>
 
-                    {children}
-                </Paper>
+            {children}
+        </Paper>
     )
 }

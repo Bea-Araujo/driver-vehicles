@@ -1,6 +1,6 @@
 import { Box, TableCell, TableHead, TableRow, TableSortLabel } from "@mui/material";
 import { visuallyHidden } from '@mui/utils';
-import { TableSortOrder } from "./enhancedTable";
+import { TableSortOrder } from "../../../lib/tableSortingUtils";
 
 interface EnhancedTableHeaderProps<T> {
     onRequestSort: (event: React.MouseEvent<unknown>, property: keyof T) => void;

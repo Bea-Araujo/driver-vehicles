@@ -10,19 +10,10 @@ import { selectVehicleStatus, selectVehicles, selectVehiclesById } from "../../.
 import { deleteVehicleThunk, fetchVehiclesThunk, saveNewVehicleThunk, updateVehicleThunk } from "../../../lib/redux/slices/vehiclesSlice/thunks";
 import { ReduxDispatch, ReduxState } from "../../../lib/redux/store";
 import { Vehicle, vehicleAdded, vehicleDeleted } from "../../../lib/redux/slices";
-import VehiclesTable from "../components/Tables/vehiclesTable";
+import VehiclesTable, { VehicleTableRow } from "../components/Tables/vehiclesTable";
 import TablePaperContainer from "../components/TablePaperContainer/tablePaperContainer";
 import ModalContainer from "../components/ModalContainer/ModalContainer";
 import { useSnackbar } from "notistack";
-
-
-export class VehicleTableRow extends Vehicle {
-    [key: string]: string
-    constructor(input?: { id: string, carPlate: string, brand: string }) {
-        super(input?.id || "", input?.carPlate || "", input?.brand || "")
-    }
-}
-
 
 export default function Page() {
     const { enqueueSnackbar } = useSnackbar();
