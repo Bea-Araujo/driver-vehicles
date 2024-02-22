@@ -2,29 +2,19 @@
 
 import { createDriver, deleteDriver, updateDriver } from "../../../lib/actions";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Box, Button, Modal, Paper, Snackbar, TextField } from "@mui/material";
+import { Box, Button, Card, Modal, Paper, Snackbar, TextField } from "@mui/material";
 import { MinimumTableProps } from "../components/enhancedTable";
 import { fetchDrivers } from "../../../lib/data";
-import DriversTable from "../components/Tables/driversTable";
+import DriversTable, { DriverTableRow } from "../components/Tables/driversTable";
 import TablePaperContainer from "../components/TablePaperContainer/tablePaperContainer";
 import ModalContainer from "../components/ModalContainer/ModalContainer";
 
 import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
-
-export class DriverTableRow extends MinimumTableProps {
-    id: string
-    name: string
-    document: string
-    vehicleId: string
-
-    constructor(input?: { id: string, name: string, document: string, vehicleId?: string }) {
-        super(input?.id || '')
-        this.id = input?.id || ''
-        this.name = input?.name || ''
-        this.document = input?.document || ''
-        this.vehicleId = input?.vehicleId || ''
-    }
-}
+import { useSelector } from "react-redux";
+import { ReduxState } from "../../../lib/redux/store";
+import { Vehicle, selectVehiclesById } from "../../../lib/redux/slices";
+import { VehicleTableRow } from "../vehicles/page";
+import CardGroup from "../components/CardGroup/cardGroup";
 
 export default function Page() {
     const { enqueueSnackbar } = useSnackbar();
@@ -39,20 +29,19 @@ export default function Page() {
         vehicleId: ""
     })
 
-    const [error, setError] = useState({status: false, message: ''})
+    const [error, setError] = useState({ status: false, message: '' })
 
-    const areButtonsActive = useMemo(() => {
+    const isDriverSelected = useMemo(() => {
         return !!selectedId
     }, [selectedId])
 
     const selectedDriverDisplayData = useMemo(() => {
-        return {
-            id: "1",
-            name: "banana pants",
-            document: "99999999999",
-            vehicleId: "4"
-        }
+        const blankData = new DriverTableRow()
+        const currentDriverData = rows.find(row => row.id === selectedId)
+        return { ...blankData, ...currentDriverData }
     }, [selectedId])
+
+    const driversVehicle = useSelector((state: ReduxState) => selectVehiclesById(state, selectedDriverDisplayData.vehicleId))
 
     const updateSelectedDriverValues = useCallback(() => {
         if (rows.length === 0) return
@@ -64,9 +53,9 @@ export default function Page() {
             const response = await fetchDrivers()
             if (!response) throw new Error("Erro ao carregar dados")
             setRows(response)
-        } catch (e){
+        } catch (e) {
             const error: Error = e as Error;
-            setError({status: true, message: error.message})
+            setError({ status: true, message: error.message })
             enqueueSnackbar(error.message, { variant: "error" })
         }
     }
@@ -91,10 +80,8 @@ export default function Page() {
             createDriver(formData)
             fetchData()
             toggleCreateModal()
-            //TODO: show success alert or success snackbar
             enqueueSnackbar("Motorista criado com sucesso!", { variant: "success" })
         } catch (e) {
-            //TODO: show error alert or error snackbar
             enqueueSnackbar("Erro ao criar motorista", { variant: "error" })
         }
 
@@ -105,10 +92,8 @@ export default function Page() {
             updateDriver(formData, editFormValues.id)
             fetchData()
             toggleEditModal()
-            //TODO: show success alert or success snackbar
             enqueueSnackbar("Motorista atualizar com sucesso!", { variant: "success" })
         } catch (e) {
-            //TODO: show error alert or error snackbar
             enqueueSnackbar("Erro ao atualizar motorista", { variant: "error" })
 
         }
@@ -119,10 +104,8 @@ export default function Page() {
             if (!selectedId) return
             await deleteDriver(selectedId)
             await fetchData()
-            //TODO: show success alert or success snackbar
             enqueueSnackbar("Motorista deletado com sucesso!", { variant: "success" })
         } catch (error) {
-            //TODO: show error alert or error snackbar
             enqueueSnackbar("Erro ao deletar motorista", { variant: "error" })
         }
     }
@@ -141,7 +124,7 @@ export default function Page() {
     return (
         <main>
             <TablePaperContainer
-                areButtonsActive={areButtonsActive}
+                areButtonsActive={isDriverSelected}
                 handleClickCreate={toggleCreateModal}
                 handleClickEdit={toggleEditModal}
                 handleClickDelete={handleDriverDeletion}
@@ -153,6 +136,12 @@ export default function Page() {
                     error={error}
                 />
             </TablePaperContainer>
+
+            <CardGroup 
+                driverDataObject={selectedDriverDisplayData}
+                vehicleDataObject={driversVehicle}
+                isShowing={isDriverSelected}
+            />
 
             <ModalContainer
                 isOpen={isCreateModalOpen}

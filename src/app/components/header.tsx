@@ -17,7 +17,7 @@ export default function Header(){
             </Link>
             </div>
 
-            <Image src="" width={100} alt="gobrax logo"/>
+            <Image src={gobraxLogo} width={100} alt="gobrax logo"/>
             <Link href="https://www.linkedin.com/in/beatriz-araujo-dev/">
                <Button variant="contained" size="medium">LinkedIn</Button>
             </Link>
