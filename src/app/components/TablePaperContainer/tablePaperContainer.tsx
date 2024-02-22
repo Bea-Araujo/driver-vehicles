@@ -14,9 +14,8 @@ interface TablePaperContainerProps {
 }
 export default function TablePaperContainer({areButtonsActive, handleClickCreate, handleClickEdit, handleClickDelete, children}: TablePaperContainerProps) {
     return (
-        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                <Paper sx={{ width: '95%', mb: 2 }}>
-                    <Box sx={{ mt: 1, ml: 1, display: "flex", justifyContent: "space-between" }}>
+                <Paper sx={{ width: '100%', mb: 2 }}>
+                    <Box sx={{ pt: 1.5, ml: 1, display: "flex", justifyContent: "space-between" }}>
                         <Button
                             variant="contained"
                             sx={{ mr: 1 }}
@@ -52,6 +51,5 @@ export default function TablePaperContainer({areButtonsActive, handleClickCreate
 
                     {children}
                 </Paper>
-            </Box>
     )
 }

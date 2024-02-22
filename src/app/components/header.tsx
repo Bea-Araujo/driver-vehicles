@@ -9,7 +9,7 @@ export default function Header(){
     return (
         <header className={style.headerContainer}>
             <div className={style.navigationContainer}>
-            <Link href="/drivers">
+            <Link href="/">
                 <Button size="medium">Motoristas</Button>
             </Link>
             <Link href="/vehicles">
