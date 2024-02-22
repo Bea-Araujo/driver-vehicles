@@ -6,11 +6,13 @@ interface ModalContainerProps {
     onClose: () => void;
     title: string;
     children?: ReactNode
+    modalId?: string
 }
 
-export default function ModalContainer({isOpen, onClose, title, children}: ModalContainerProps) {
+export default function ModalContainer({isOpen, onClose, title, modalId, children}: ModalContainerProps) {
     return (
         <Modal
+        id={modalId}
         open={isOpen}
         onClose={onClose}
         aria-labelledby="parent-modal-title"

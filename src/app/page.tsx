@@ -84,7 +84,7 @@ export default function Page() {
             updateDriver(formData, editFormValues.id)
             fetchData()
             setIsEditModalOpen(false)
-            enqueueSnackbar("Motorista atualizar com sucesso!", { variant: "success" })
+            enqueueSnackbar("Motorista atualizado com sucesso!", { variant: "success" })
         } catch (e) {
             enqueueSnackbar("Erro ao atualizar motorista", { variant: "error" })
 
@@ -163,6 +163,7 @@ export default function Page() {
             />
 
             <ModalContainer
+                modalId="modal-create-driver-form-container"
                 isOpen={isCreateModalOpen}
                 onClose={toggleCreateModal}
                 title="Criar um motorista"
@@ -230,15 +231,6 @@ export default function Page() {
                             variant="outlined"
                             name="document"
                             value={editFormValues?.document}
-                            onChange={handleEditFormChange}
-                        />
-
-                        <TextField
-                            id="edit-driver-form__vehicle-id"
-                            label="Veículo"
-                            variant="outlined"
-                            name="vehicleId"
-                            value={editFormValues?.vehicleId}
                             onChange={handleEditFormChange}
                         />
 

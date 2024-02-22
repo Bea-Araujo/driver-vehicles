@@ -29,6 +29,7 @@ npm run dev
 - [ ] Aplicar testes em cypress
 - [ ] Criar validação para formulários
 - [ ] Componentizar modals de criação e edição
+- [ ] Revisar estrutura de thunks de vehicleSlice
 
 ### Bugs
 - [ ] Título: json-server
