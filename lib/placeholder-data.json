@@ -1,18 +1,5 @@
 {
-  "drivers": [
-    {
-      "name": "carlinha",
-      "document": "123",
-      "vehicleId": "IpcGRvT",
-      "id": "zZdh8Y8"
-    },
-    {
-      "name": "Godofredo544",
-      "document": "d",
-      "vehicleId": "E4_e9t2",
-      "id": "gfLos_d"
-    }
-  ],
+  "drivers": [],
   "vehicles": [
     {
       "carPlate": "asdsa",
