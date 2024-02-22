@@ -66,7 +66,7 @@ export default function Page() {
             await dispatch(saveNewVehicleThunk(payload)).unwrap();
             fetchData()
             toggleCreateModal()
-            enqueueSnackbar("deu boa", { variant: "success" })
+            enqueueSnackbar("Veículo criado com sucesso!", { variant: "success" })
         } catch (e) {
             const error: Error = e as Error
             enqueueSnackbar(error.message, { variant: "error" })

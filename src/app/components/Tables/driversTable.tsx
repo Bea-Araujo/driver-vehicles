@@ -27,7 +27,7 @@ interface DriverTableProps {
 
 export default function DriversTable({ rows, selectedId, setSelectedId, error }: DriverTableProps) {
     const [order, setOrder] = useState<TableSortOrder>('asc');
-    const [orderBy, setOrderBy] = useState<keyof DriverTableRow>('id');
+    const [orderBy, setOrderBy] = useState<keyof DriverTableRow>('name');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 

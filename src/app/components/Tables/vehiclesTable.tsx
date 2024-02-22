@@ -22,7 +22,7 @@ interface VehicleTableProps {
 
 export default function VehiclesTable({ rows, selectedId, setSelectedId }: VehicleTableProps) {
     const [order, setOrder] = useState<TableSortOrder>('asc');
-    const [orderBy, setOrderBy] = useState<keyof VehicleTableRow>('id');
+    const [orderBy, setOrderBy] = useState<keyof VehicleTableRow>('carPlate');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
