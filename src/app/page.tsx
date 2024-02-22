@@ -21,7 +21,7 @@ export default function Page() {
     const [rows, setRows] = useState<DriverTableRow[]>([])
     const [selectedId, setSelectedId] = useState<string>()
 
-    const [editFormValues, setEditFormValues] = useState<DriverTableRow>(new DriverTableRow())
+    const [selectedDriverData, setSelectedDriverData] = useState<DriverTableRow>(new DriverTableRow())
 
     const [error, setError] = useState({ status: false, message: '' })
 
@@ -43,6 +43,7 @@ export default function Page() {
             if (!response) throw new Error("Erro ao carregar dados")
             if (response.length === 0) setError({ status: true, message: "Nenhum motorista encontrado" })
             setRows(response)
+            dispatch(fetchVehiclesThunk())
         } catch (e) {
             const error: Error = e as Error;
             setError({ status: true, message: error.message })
@@ -56,7 +57,7 @@ export default function Page() {
     }, [])
 
     const handleEditFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setEditFormValues((prev) => ({
+        setSelectedDriverData((prev) => ({
             ...prev,
             [event.target.name]: event.target.value,
         }));
@@ -81,7 +82,7 @@ export default function Page() {
 
     function handleSubmitEditForm(formData: FormData) {
         try {
-            updateDriver(formData, editFormValues.id)
+            updateDriver(formData, selectedDriverData.id)
             fetchData()
             setIsEditModalOpen(false)
             enqueueSnackbar("Motorista atualizado com sucesso!", { variant: "success" })
@@ -105,7 +106,7 @@ export default function Page() {
 
     function assertDeletedLastUser() {
         const isRowsEmpty = rows.length === 0
-        isRowsEmpty && setError({ status: true, message: "Nnehum motorista encontrado" })
+        isRowsEmpty && setError({ status: true, message: "Nenhum motorista encontrado" })
         setSelectedId('')
     }
 
@@ -113,13 +114,13 @@ export default function Page() {
 
     function handleClickEditModal() {
         updateSelectedDriverValues()
-        setSelectedVehicleId(editFormValues.vehicleId)
+        setSelectedVehicleId(selectedDriverData.vehicleId)
         setIsEditModalOpen((prev) => !prev)
     }
 
     const updateSelectedDriverValues = () => {
         if (rows.length === 0) return
-        setEditFormValues(rows.find(row => row.id === selectedId) || new DriverTableRow())
+        setSelectedDriverData(rows.find(row => row.id === selectedId) || new DriverTableRow())
     }
 
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
@@ -135,6 +136,7 @@ export default function Page() {
     };
 
     const vehicles = useSelector(selectVehicles)
+    console.log(selectedDriverData)
 
     return (
         <Box sx={{width: "95%", mx: "auto"}}>
@@ -213,7 +215,7 @@ export default function Page() {
                             label="ID do motorista"
                             variant="outlined"
                             name="driverId"
-                            value={editFormValues?.id}
+                            value={selectedDriverData?.id}
                             disabled
                         />
 
@@ -222,7 +224,7 @@ export default function Page() {
                             label="Nome"
                             variant="outlined"
                             name="name"
-                            value={editFormValues?.name}
+                            value={selectedDriverData?.name}
                             onChange={handleEditFormChange}
                         />
                         <TextField
@@ -230,7 +232,7 @@ export default function Page() {
                             label="Documento"
                             variant="outlined"
                             name="document"
-                            value={editFormValues?.document}
+                            value={selectedDriverData?.document}
                             onChange={handleEditFormChange}
                         />
 
