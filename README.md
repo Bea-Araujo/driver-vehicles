@@ -27,8 +27,22 @@ npm run dev
 ## Proximos passos
 ### Refatorações
 - [ ] Aplicar testes em cypress
+    - [ x ] Testar caso normal para CRUD de driver
+    - [ ] Testar caso campo inválido em formulários para CRUD de driver
+    - [ ] Testar caso de erro na chamada ou envio de daods em CRUD de driver
+    - [ ] Testar caso normal para CRUD de vehicle
+    - [ ] Testar caso campo inválido em formulários para CRUD de driver
+    - [ ] Testar caso de erro na chamada ou envio de daods em CRUD de driver
 - [ ] Criar validação para formulários
+    - [ ] Form de criação de driver
+    - [ ] Form de edição de driver
+    - [ ] Form de criação de vehicle
+    - [ ] Form de edição de vehicle
 - [ ] Componentizar modals de criação e edição
+    - [ ] modal de form de criação de driver
+    - [ ] modal de form de edição de driver
+    - [ ] modal de form de criação de vehicle
+    - [ ] modal de form de edição de vehicle
 - [ ] Revisar estrutura de thunks de vehicleSlice
 
 ### Bugs
