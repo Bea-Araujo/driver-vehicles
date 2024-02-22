@@ -125,6 +125,7 @@ export default function Page() {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
     function toggleCreateModal() {
         setIsCreateModalOpen((prev) => !prev)
+        setSelectedVehicleId('')
         vehicleIds.length === 0 && dispatch(fetchVehiclesThunk());
     }
 
