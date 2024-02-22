@@ -105,7 +105,7 @@ export default function EnhancedTable<T extends MinimumTableProps>({
                     </TableBody>
                 </Table>
             </TableContainer>
-            <TablePagination
+            {/* <TablePagination
                 id={`enhanced-table-pagination-input`}
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
@@ -114,7 +114,7 @@ export default function EnhancedTable<T extends MinimumTableProps>({
                 page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+            /> */}
         </Box>
     );
 }

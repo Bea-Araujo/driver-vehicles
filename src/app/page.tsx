@@ -144,6 +144,12 @@ export default function Page() {
                 Motoristas
             </Typography>
 
+            <CardGroup
+                driverDataObject={selectedDriverDisplayData}
+                vehicleDataObject={driversVehicle}
+                isShowing={isDriverSelected}
+            />
+
             <TablePaperContainer
                 areButtonsActive={isDriverSelected}
                 handleClickCreate={toggleCreateModal}
@@ -157,12 +163,6 @@ export default function Page() {
                     error={error}
                 />
             </TablePaperContainer>
-
-            <CardGroup
-                driverDataObject={selectedDriverDisplayData}
-                vehicleDataObject={driversVehicle}
-                isShowing={isDriverSelected}
-            />
 
             <ModalContainer
                 modalId="modal-create-driver-form-container"

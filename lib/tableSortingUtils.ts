@@ -35,10 +35,7 @@ export class TableSortingUtils {
 
     static createVisibleRows<T extends Record<string, string | number>>(tableInfo: {rows: T[], order: TableSortOrder, orderBy: keyof T, page: number, rowsPerPage: number}): T[] {
         const {rows, order, orderBy, page, rowsPerPage} = tableInfo
-        return this.stableSort(rows, this.getComparator(order, orderBy)).slice(
-            page * rowsPerPage,
-            page * rowsPerPage + rowsPerPage,
-        )
+        return this.stableSort(rows, this.getComparator(order, orderBy))
     }
 }
 export type TableSortOrder = 'asc' | 'desc';

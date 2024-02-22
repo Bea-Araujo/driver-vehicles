@@ -11,7 +11,6 @@ export default function CardGroup({ isShowing, driverDataObject, vehicleDataObje
     const driverFieldLabels: Record<keyof DriverTableRow, string> = {id: 'id', name: 'nome', document: 'documento', vehicleId: 'id do veículo'}
 
     const vehicleFieldLabels: Record<keyof VehicleTableRow, string> = {id: 'id', carPlate: 'Placa do carro', brand: 'Marca'}
-    console.log(vehicleDataObject)
     if (isShowing) return (
         <Box sx={{ width: '95%', display: 'flex', justifyContent: 'space-evenly', mx: 'auto', gap: 2 }}>
             <Card variant="outlined" sx={{ width: '50%', p: 1 }}>
