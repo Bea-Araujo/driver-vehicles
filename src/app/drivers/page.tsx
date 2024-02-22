@@ -114,6 +114,7 @@ export default function Page() {
 
     function handleClickEditModal() {
         updateSelectedDriverValues()
+        setSelectedVehicleId(editFormValues.vehicleId)
         setIsEditModalOpen((prev) => !prev)
     }
 
@@ -126,7 +127,7 @@ export default function Page() {
     function toggleCreateModal() {
         setIsCreateModalOpen((prev) => !prev)
         setSelectedVehicleId('')
-        vehicleIds.length === 0 && dispatch(fetchVehiclesThunk());
+        vehicles.length === 0 && dispatch(fetchVehiclesThunk());
     }
 
     const [selectedVehicleId, setSelectedVehicleId] = useState('')
@@ -134,7 +135,7 @@ export default function Page() {
         setSelectedVehicleId(event.target.value as string);
     };
 
-    const vehicleIds = useSelector(selectVehicles)
+    const vehicles = useSelector(selectVehicles)
 
     return (
         <main>
@@ -179,7 +180,7 @@ export default function Page() {
                                 name="vehicleId"
                             >
                                 {
-                                    vehicleIds.map(el => (
+                                    vehicles.map(el => (
                                         <MenuItem key={`create-driver-form__select__option-${el.id}`} value={el.id}>
                                             {el.carPlate}
                                         </MenuItem>
@@ -249,7 +250,7 @@ export default function Page() {
                                 name="vehicleId"
                             >
                                 {
-                                    vehicleIds.map(el => (
+                                    vehicles.map(el => (
                                         <MenuItem key={`edit-driver-form__select__option-${el.id}`} value={el.id}>
                                             {el.carPlate}
                                         </MenuItem>
@@ -260,7 +261,7 @@ export default function Page() {
                     </Box>
 
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-                        <Button onClick={toggleCreateModal}>Cancelar</Button>
+                        <Button onClick={handleClickEditModal}>Cancelar</Button>
                         <Button variant="outlined" type="submit">Salvar</Button>
                     </Box>
                 </form>
