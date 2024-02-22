@@ -49,23 +49,15 @@ export default function Page() {
     // const test = useSelector((state: ReduxState) => selectVehiclesById(state, "0"))
     // console.log(test)
 
-    const updateSelectedVehicleValues = useCallback(() => {
-        if (!rows) return
-        if (rows.length === 0) return
+    const updateEditFormValues = () => {
         setEditFormValues(rows.find(row => row.id === selectedId) || new VehicleTableRow())
-    }, [selectedId, rows])
+    }
 
-    const fetchData = useCallback(async () => {
-            await dispatch(fetchVehiclesThunk())
-    }, [dispatch])
-
-    useEffect(() => {
-        fetchData()
-    }, [fetchData])
-
-    useEffect(() => {
-        updateSelectedVehicleValues()
-    }, [selectedId, updateSelectedVehicleValues])
+    const fetchData = (): void  => {
+        dispatch(fetchVehiclesThunk());
+    }
+    
+    useEffect(fetchData, []);
 
     const handleEditFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEditFormValues((prev) => ({
@@ -75,13 +67,12 @@ export default function Page() {
     };
 
 
-    function handleSubmitCreateForm(formData: FormData) {
+    async function handleSubmitCreateForm(formData: FormData) {
         const payload = {
             formData: formData,
         }
         try {
-            dispatch(saveNewVehicleThunk(payload))
-            if (status === 'failed') throw new Error("Falha ao atualizar veículo")
+            await dispatch(saveNewVehicleThunk(payload)).unwrap();
             fetchData()
             toggleCreateModal()
             enqueueSnackbar("deu boa", { variant: "success" })            
@@ -91,23 +82,15 @@ export default function Page() {
         }
     }
 
-    useEffect(() => {
-        console.log('aaa')
-        if (status === 'failed') enqueueSnackbar("Falha ao atualizar veículo", { variant: "error" })
-    }, [status])
-
     async function handleSubmitEditForm(formData: FormData) {
         const payload = {
             vehicleId: editFormValues.id,
             formData: formData,
         }
         try {
-            const a = await dispatch(updateVehicleThunk(payload))
-            console.log('STRING ON THE SIDE', status)
-            if (status === 'failed') throw new Error("Falha ao atualizar veículo")
-            // fetchData()
-            
-            toggleEditModal()
+            await dispatch(updateVehicleThunk(payload)).unwrap()
+            fetchData()
+            setIsEditModalOpen(false)
             enqueueSnackbar("Veículo atualizado com sucesso!", { variant: "success" })
         } catch (e) {
             const error: Error = e as Error
@@ -115,12 +98,12 @@ export default function Page() {
         }
     }
 
-    const handleVehicleDeletion = () => {
+    async function handleVehicleDeletion() {
         const payload = {
             vehicleId: editFormValues.id
         }
         try {
-            dispatch(deleteVehicleThunk(payload))
+            await dispatch(deleteVehicleThunk(payload)).unwrap()
             if (status === 'failed') throw new Error("Falha ao deletar veículo")
             enqueueSnackbar("Veículo deletado com sucesso!", { variant: "success" })
         } catch (e) {
@@ -132,7 +115,8 @@ export default function Page() {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
 
-    function toggleEditModal() {
+    function handleClickEditModal() {
+        updateEditFormValues()
         setIsEditModalOpen((prev) => !prev)
     }
 
@@ -145,7 +129,7 @@ export default function Page() {
             <TablePaperContainer
                 areButtonsActive={areButtonsActive}
                 handleClickCreate={toggleCreateModal}
-                handleClickEdit={toggleEditModal}
+                handleClickEdit={handleClickEditModal}
                 handleClickDelete={handleVehicleDeletion}
             >
                 <VehiclesTable
@@ -176,7 +160,7 @@ export default function Page() {
 
             <ModalContainer
                 isOpen={isEditModalOpen}
-                onClose={toggleEditModal}
+                onClose={handleClickEditModal}
                 title="Editar um veículo"
             > 
                   <form action={handleSubmitEditForm}>
@@ -199,7 +183,7 @@ export default function Page() {
                             />
                     </Box>
                      <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-                        <Button onClick={toggleEditModal}>Cancelar</Button>
+                        <Button onClick={handleClickEditModal}>Cancelar</Button>
                         <Button variant="outlined" type="submit">Salvar</Button>
                     </Box>
                 </form>

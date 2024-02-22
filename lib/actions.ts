@@ -83,7 +83,6 @@ export const updateVehicle = async (formData: FormData, vehicleId: string) => {
             brand,
         }
 
-        throw new Error()
 
         const response = await fetch(`http://localhost:8000/vehicles/${vehicleId}`, {
             method: "PUT",
@@ -93,8 +92,6 @@ export const updateVehicle = async (formData: FormData, vehicleId: string) => {
             body: JSON.stringify(updatedVehicleData)
         })
     } catch(e) {
-        console.log(e)
-        console.log('ENTERED CATCH BLOCK')
         throw new Error('Failed to update vehicle')
     }
 }

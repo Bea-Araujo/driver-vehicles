@@ -24,7 +24,7 @@ export const vehiclesSlice = createSlice({
         state.status = "idle";
         vehiclesAdapter.upsertMany(state, action.payload);
       })
-      .addCase(fetchVehiclesThunk.rejected, (state, action) => {
+      .addCase(fetchVehiclesThunk.rejected, (state) => {
         state.status = "error";
       })
 
@@ -34,18 +34,17 @@ export const vehiclesSlice = createSlice({
       .addCase(saveNewVehicleThunk.fulfilled, (state) => {
         state.status = "idle";
       })
-      .addCase(saveNewVehicleThunk.rejected, (state, action) => {
+      .addCase(saveNewVehicleThunk.rejected, (state) => {
         state.status = "failed";
       })
 
       .addCase(updateVehicleThunk.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(updateVehicleThunk.fulfilled, (state, action) => {
+      .addCase(updateVehicleThunk.fulfilled, (state) => {
         state.status = "idle";
-        vehiclesAdapter.upsertMany(state, action.payload);
       })
-      .addCase(updateVehicleThunk.rejected, (state, action) => {
+      .addCase(updateVehicleThunk.rejected, (state) => {
         state.status = "failed";
       })
 
@@ -56,7 +55,7 @@ export const vehiclesSlice = createSlice({
         state.status = "idle";
         vehiclesAdapter.removeOne(state, action.payload);
       })
-      .addCase(deleteVehicleThunk.rejected, (state, action) => {
+      .addCase(deleteVehicleThunk.rejected, (state) => {
         state.status = "failed";
       })
   },
