@@ -114,13 +114,14 @@ export default function Page() {
 
     function handleClickEditModal() {
         updateSelectedDriverValues()
-        setSelectedVehicleId(selectedDriverData.vehicleId)
         setIsEditModalOpen((prev) => !prev)
     }
 
     const updateSelectedDriverValues = () => {
         if (rows.length === 0) return
-        setSelectedDriverData(rows.find(row => row.id === selectedId) || new DriverTableRow())
+        const driver = rows.find(row => row.id === selectedId)
+        setSelectedDriverData(driver || new DriverTableRow())
+        setSelectedVehicleId(driver?.vehicleId || '')
     }
 
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
@@ -136,7 +137,6 @@ export default function Page() {
     };
 
     const vehicles = useSelector(selectVehicles)
-    console.log(selectedDriverData)
 
     return (
         <Box sx={{width: "95%", mx: "auto"}}>
