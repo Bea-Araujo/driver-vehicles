@@ -60,6 +60,12 @@ npm run dev
 - [ ] Revisar estrutura de thunks de vehicleSlice
 
 ### Bugs
+- [ ] Título: erro de paginação da tabela
+    - Descrição: ao deletar último item de uma página diferente da primeira é lançado um erro de número da página excede a quantidade de páginas
+    - Causa identificada: prop page excede quantidade de páginas
+    - Solução: (TEMPORÁRIA) remover páginação
+
+    
 - [ ] Título: json-server
     - Descrição: Ao fazer um requisição DELETE em drivers, todos os drivers eram deletados
     - Causa identificada: json-server tem limitação de, ao fazer um DELETE request todos os drivers com vehicleId inexistentes, todos os drivers são deletados
