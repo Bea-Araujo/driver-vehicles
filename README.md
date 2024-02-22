@@ -24,13 +24,27 @@ npm run dev
 ```
 - Abrir [http://localhost:3000](http://localhost:3000) no browser
 
+## Acompanhamento
+- [x] Criar página de motoristas
+    - [x] listagem
+    - [x] criação
+    - [x] edição
+    - [x] deleção
+- [x] Criar página de vehicles
+    - [x] listagem
+    - [x] criação
+    - [x] edição
+    - [x] deleção
+- [x] Adicionar gerenciador de estado global 
+- [ ] Aplicar testes básicos em cypress
+    - [x] Testar caso normal para CRUD de driver
+    - [ ] Testar caso normal para CRUD de vehicle
+
 ## Proximos passos
 ### Refatorações
-- [ ] Aplicar testes em cypress
-    - [ x ] Testar caso normal para CRUD de driver
+- [ ] Aplicar testes aprimorados em cypress
     - [ ] Testar caso campo inválido em formulários para CRUD de driver
     - [ ] Testar caso de erro na chamada ou envio de daods em CRUD de driver
-    - [ ] Testar caso normal para CRUD de vehicle
     - [ ] Testar caso campo inválido em formulários para CRUD de driver
     - [ ] Testar caso de erro na chamada ou envio de daods em CRUD de driver
 - [ ] Criar validação para formulários
