@@ -2,7 +2,6 @@ Para esse projeto foi utilizado npm v20.11.0
 
 ## Iniciando projeto
 
-
 - Baixar dependências
 
 ```bash
@@ -20,9 +19,24 @@ npm run dev
 ```bash
  npm run json-server
  OU
- json-server --watch lib/placeholder-data.json -p 8000"
+ json-server --watch lib/placeholder-data.json -p 8000
 ```
 - Abrir [http://localhost:3000](http://localhost:3000) no browser
+
+## Executar testes
+
+- Iniciar servidor de desenvolviemnto:
+
+```bash
+npm run dev
+```
+
+- Executar cypress
+
+
+```bash
+ npm run cypress:open
+```
 
 ## Acompanhamento
 - [x] Criar página de motoristas
@@ -59,21 +73,22 @@ npm run dev
     - [ ] modal de form de edição de vehicle
 - [ ] Revisar estrutura de thunks de vehicleSlice
 
+- [ ] Alterar tratativa de timeout
+    - ou criar uma api sem utilizar json-server ou fazer loader aparecer apenas na linha que está carregando
+
 ### Bugs
 - [ ] Título: erro de paginação da tabela
     - Descrição: ao deletar último item de uma página diferente da primeira é lançado um erro de número da página excede a quantidade de páginas
     - Causa identificada: prop page excede quantidade de páginas
     - Solução: (TEMPORÁRIA) remover páginação
 
-    
-- [ ] Título: json-server
-    - Descrição: Ao fazer um requisição DELETE em drivers, todos os drivers eram deletados
-    - Causa identificada: json-server tem limitação de, ao fazer um DELETE request todos os drivers com vehicleId inexistentes, todos os drivers são deletados
-    - Solução: (temporária) menu de seleção feito a partir de drivers existentes na criação de um driver
-        - Obs: um veículo deve ser criado antes de criar um driver, no futuro seria interessante poder criar um vehicle apenas com placa e id a partir da criação de um driver
+- [ ] Escopo: json-server
+    - [ ] Título: json-server não permite que dados sejam alterados
+        - Causa identificada: json-server permite GET, mas para fazer write foi necessário utilizar de outros artifícios, ver [https://github.com/kitloong/json-server-vercel/tree/main REFERENCIA]
+        - Solução: (TEMPORÁRIA) adiciona setTimeOut logo após CREATE, UPDATE e DELETE
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+    - [ ] Título: json-server deleta todas as entries
+        - Descrição: Ao fazer um requisição DELETE em drivers, todos os drivers eram deletados
+        - Causa identificada: json-server tem limitação de, ao fazer um DELETE request todos os drivers com vehicleId inexistentes, todos os drivers são deletados
+        - Solução: (TEMPORÁRIA) menu de seleção feito a partir de drivers existentes na criação de um driver
+            - Obs: um veículo deve ser criado antes de criar um driver, no futuro seria interessante poder criar um vehicle apenas com placa e id a partir da criação de um driver

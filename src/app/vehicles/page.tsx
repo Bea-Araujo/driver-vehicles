@@ -54,9 +54,13 @@ export default function Page() {
         }
         try {
             await dispatch(saveNewVehicleThunk(payload)).unwrap();
-            fetchData()
             toggleCreateModal()
-            enqueueSnackbar("Veículo criado com sucesso!", { variant: "success" })
+
+            setTimeout(() => {
+                fetchData()
+                enqueueSnackbar("Veículo criado com sucesso!", { variant: "success" })
+            }, 3000)
+
         } catch (e) {
             const error: Error = e as Error
             enqueueSnackbar(error.message, { variant: "error" })
@@ -70,9 +74,12 @@ export default function Page() {
         }
         try {
             await dispatch(updateVehicleThunk(payload)).unwrap()
-            fetchData()
             setIsEditModalOpen(false)
-            enqueueSnackbar("Veículo atualizado com sucesso!", { variant: "success" })
+
+            setTimeout(() => {
+                fetchData()
+                enqueueSnackbar("Veículo atualizado com sucesso!", { variant: "success" })
+            }, 3000)
         } catch (e) {
             const error: Error = e as Error
             enqueueSnackbar(error.message, { variant: "error" })
@@ -86,7 +93,10 @@ export default function Page() {
         try {
             await dispatch(deleteVehicleThunk(payload)).unwrap()
             if (status === 'failed') throw new Error("Falha ao deletar veículo")
-            enqueueSnackbar("Veículo deletado com sucesso!", { variant: "success" })
+            setTimeout(() => {
+                fetchData()
+                enqueueSnackbar("Veículo deletado com sucesso!", { variant: "success" })
+            }, 3000)
         } catch (e) {
             const error: Error = e as Error
             enqueueSnackbar(error.message, { variant: "error" })

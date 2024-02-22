@@ -67,9 +67,13 @@ export default function Page() {
         try {
             console.log(formData)
             assertFirstDriverAndCreate(formData)
-            fetchData()
+
             toggleCreateModal()
-            enqueueSnackbar("Motorista criado com sucesso!", { variant: "success" })
+            
+            setTimeout(() => {
+                fetchData()
+                enqueueSnackbar("Motorista criado com sucesso!", { variant: "success" })
+            }, 3000)
         } catch (e) {
             enqueueSnackbar("Erro ao criar motorista", { variant: "error" })
         }
@@ -82,10 +86,17 @@ export default function Page() {
 
     function handleSubmitEditForm(formData: FormData) {
         try {
+            setSelectedId('')
             updateDriver(formData, selectedDriverData.id)
-            fetchData()
+
+            setRows([])
             setIsEditModalOpen(false)
-            enqueueSnackbar("Motorista atualizado com sucesso!", { variant: "success" })
+
+            setTimeout(() => {
+                fetchData()
+                enqueueSnackbar("Motorista atualizado com sucesso!", { variant: "success" })
+            }, 3000)
+            
         } catch (e) {
             enqueueSnackbar("Erro ao atualizar motorista", { variant: "error" })
 
@@ -96,9 +107,14 @@ export default function Page() {
         try {
             if (!selectedId) return
             await deleteDriver(selectedId)
-            await fetchData()
-            assertDeletedLastUser()
-            enqueueSnackbar("Motorista deletado com sucesso!", { variant: "success" })
+           
+            setRows([])
+            setTimeout(() => {
+                fetchData()
+                assertDeletedLastUser()
+                enqueueSnackbar("Motorista deletado com sucesso!", { variant: "success" })
+            }, 3000)
+            
         } catch (error) {
             enqueueSnackbar("Erro ao deletar motorista", { variant: "error" })
         }

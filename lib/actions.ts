@@ -40,7 +40,9 @@ export const updateDriver = async (formData: FormData, id:string) => {
             body: JSON.stringify(updatedDriverData)
         })
     } catch(e) {
-        throw new Error('Failed to create driver')
+        console.log('ERROR')
+        console.error(e)
+        throw new Error('Failed to update driver')
     }
 }
 
